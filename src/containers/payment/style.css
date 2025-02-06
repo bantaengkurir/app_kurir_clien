@@ -1,0 +1,420 @@
+.orders-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.seller-header {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border-left: 4px solid #0d6efd;
+}
+
+.section-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.order-card {
+    transition: transform 0.2s;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+}
+
+.product-item {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.payment-section {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+.orders-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.main-time-card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.main-time-card .card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.seller-sub-card {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.seller-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.product-image {
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.section-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.order-summary {
+    position: sticky;
+    top: 20px;
+}
+
+.product-item {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.payment-summary {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+
+/* Tambahkan style untuk preview bukti transfer */
+
+.payment-proof-preview {
+    max-width: 200px;
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+
+/* Responsive modal */
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+.orders-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.main-date-card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.seller-card {
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+}
+
+.seller-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.product-item {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.total-summary {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.bank-info {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+
+/* Tambahkan style untuk komponen pembayaran */
+
+.payment-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.payment-form .form-control {
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+.payment-form .btn {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.payment-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+
+/* Tambahkan di file style.css */
+
+
+/* style.css */
+
+.modal {
+    z-index: 9999 !important;
+    display: block !important;
+}
+
+.modal-dialog {
+    margin: 1.75rem auto;
+    max-width: 600px;
+}
+
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-backdrop {
+    z-index: 9998 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+/* ini kodal class */
+
+body {
+    background: #f8f9fb;
+    font-family: "Euclid Circular A", "Poppins";
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* ok */
+
+.modal-1-overlay,
+.modal-1-modal {
+    position: fixed;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+}
+
+.div-close {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    /* z-index: 99; */
+    background-color: #dedede;
+    margin-top: -300px;
+    margin-right: -450px;
+}
+
+@keyframes overlay-in {
+    0% {
+        scale: 0 0.004;
+    }
+    33% {
+        scale: 1 0.004;
+    }
+    66%,
+    100% {
+        scale: 1 1;
+    }
+}
+
+
+/* ok */
+
+.modal-1-overlay {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(0 0 0 / 75%);
+    display: grid;
+    place-items: center;
+}
+
+
+/* ok */
+
+.modal-1-overlay.open {
+    visibility: visible;
+    opacity: 1;
+    animation: overlay-in 1s both;
+}
+
+@keyframes modal-in {
+    0%,
+    66% {
+        opacity: 0;
+        visibility: hidden;
+        translate: -50% -40%;
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+
+/* ok */
+
+.modal-1-modal {
+    z-index: 2;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0 40px 50px;
+    translate: -50% -50%;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
+}
+
+
+/* ok */
+
+.modal-1-overlay.open .modal-1-modal {
+    opacity: 1;
+    visibility: visible;
+    animation: modal-in 1s;
+}
+
+
+/* ok */
+
+.modal-1-modal form {
+    display: grid;
+    gap: 16px;
+}
+
+
+/* ok */
+
+.modal-1-modal .textbox {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+
+/* ok */
+
+.modal-1-modal input {
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ececec;
+    height: 56px;
+    border-radius: 6px;
+    font-family: inherit;
+    padding: 0 16px 0 44px;
+    font-size: 16px;
+}
+
+
+/* ok */
+
+.modal-1-modal input::placeholder {
+    color: #96939c;
+}
+
+
+/* ok */
+
+.modal-1-modal>p {
+    color: #96939c;
+    margin: 30px 0 0;
+}
+
+.modal-1-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.modal-1-overlay.open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-1-modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.div-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+}
+
+.modal-body .form-select {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.total-payment {
+    margin-top: 1.5rem;
+    text-align: center;
+}
