@@ -705,6 +705,24 @@ const useProductStore = create((set, get) => ({
             )
         }));
     },
+
+
+    fetchPayment: async() => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("userData not found. Unable to fetch products.");
+                return;
+            }
+
+            const response = await axiosInstance.get("/payments", );
+            set({ payments: response.data.data });
+            console.log("Fetched payment successfully:", response.data.data);
+        } catch (error) {
+            console.error("Fetch payment error:", error);
+        }
+    },
+
 }));
 
 export default useProductStore;

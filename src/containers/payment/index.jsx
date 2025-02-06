@@ -921,7 +921,6 @@
 
 // export default Index;
 
-
 import { 
   Card, 
   Row, Col, Spinner, Badge, Button } from "react-bootstrap";
@@ -937,11 +936,16 @@ import toast from "react-hot-toast";
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const { fetchOrder, orders, createPayment, updateOrderStatus } = useProductStore();
+  const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus } = useProductStore();
+
+  // Fungsi untuk mendapatkan daftar order_id yang sudah dibayar
+  const getPaidOrderIds = () => {
+    return new Set(payments.map(payment => payment.order_id));
+  };
 
   const handlePayment = (group) => {
-    // Hitung total yang benar dengan menambahkan subtotal dan ongkir
     const calculatedTotal = group.subtotal + parseFloat(group.shippingInfo.shipping_cost);
+    
     
     setSelectedOrder({
       orderId: group.orderId,
@@ -972,13 +976,20 @@ const Index = () => {
 
   useEffect(() => {
     fetchOrder();
-  }, [fetchOrder]);
+    fetchPayment();
+  }, [fetchOrder, fetchPayment]);
 
   const groupOrdersByTimeAndSeller = (orders) => {
     const grouped = {};
+    const paidOrderIds = getPaidOrderIds();
 
     orders.forEach((order) => {
-      const orderDate = new Date(order.shipping_cost[0].createdAt);
+      // Skip order yang sudah memiliki pembayaran
+      if (paidOrderIds.has(order.order_id)) return;
+
+      const orderDate = new Date(order.shipping_cost?.[0]?.createdAt);
+      if (!orderDate.getTime()) return;
+
       const timeKey = format(orderDate, 'yyyy-MM-dd HH:mm');
       const dateLabel = format(orderDate, 'EEEE, d MMMM yyyy', { locale: id });
       const timeLabel = format(orderDate, 'HH:mm', { locale: id });
@@ -1033,43 +1044,40 @@ const Index = () => {
         <h2 className="text-center mb-4 fw-bold text-primary">Riwayat Pesanan</h2>
 
         {Object.keys(groupedOrders).length > 0 ? (
-          Object.entries(groupedOrders).map(([timeKey, group]) => {
-            // Hitung total yang benar untuk ditampilkan
-            // const calculatedTotal = group.subtotal + parseFloat(group.shippingInfo.shipping_cost);
-            
-            return (
-              <Card key={timeKey} className="mb-4 main-time-card shadow">
-                <Card.Header className="bg-primary text-white">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <h4 className="mb-0">{group.dateLabel}</h4>
-                      <small>Waktu Pesanan: {group.timeLabel}</small>
-                    </div>
-                    <div className="d-flex align-items-center gap-3">
-                      <Badge bg="light" text="dark" className="fs-6">
-                        <i className="bi bi-clock me-2"></i>
-                        {group.timeLabel}
-                      </Badge>
-                      <Button 
-                        variant="warning" 
-                        onClick={() => handlePayment(group)}
-                        className="fw-bold"
-                      >
-                        <i className="bi bi-credit-card me-2"></i>
-                        Bayar Sekarang
-                      </Button>
-                    </div>
+          Object.entries(groupedOrders).map(([timeKey, group]) => (
+            <Card key={timeKey} className="mb-4 main-time-card shadow">
+              {/* Bagian Card.Header dan Card.Body tetap sama seperti sebelumnya */}
+              <Card.Header className="bg-primary text-white">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h4 className="mb-0">{group.dateLabel}</h4>
+                    <small>Waktu Pesanan: {group.timeLabel}</small>
                   </div>
-                </Card.Header>
-                {/* ... (bagian Card.Body tetap sama) */}
+                  <div className="d-flex align-items-center gap-3">
+                    <Badge bg="light" text="dark" className="fs-6">
+                      <i className="bi bi-clock me-2"></i>
+                      {group.timeLabel}
+                    </Badge>
+                    <Button 
+                      variant="warning" 
+                      onClick={() => handlePayment(group)}
+                      className="fw-bold"
+                    >
+                      <i className="bi bi-credit-card me-2"></i>
+                      Bayar Sekarang
+                    </Button>
+                  </div>
+                </div>
+              </Card.Header>
+              
               <Card.Body>
                 {/* Daftar penjual dan produk */}
                 {Object.entries(group.sellers).map(([sellerKey, seller]) => (
                   <Card key={sellerKey} className="mb-4 seller-sub-card">
+                    {/* ... (isi Card.Body sama seperti sebelumnya) */}
                     <Card.Header className="bg-light">
-                      {/* Header penjual */}
                       <div className="d-flex align-items-center">
-                         <img 
+                        <img 
                           src={seller.sellerInfo.image} 
                           alt={seller.sellerInfo.name}
                           className="seller-avatar me-3"
@@ -1082,10 +1090,9 @@ const Index = () => {
                     </Card.Header>
                     <Card.Body>
                       <Row>
-                        <Col md={12}> {/* Kolom diperlebar ke 12 */}
+                        <Col md={12}>
                           <div className="product-list">
                             {seller.items.map((item, itemIndex) => (
-                              // Daftar produk tetap sama
                               <div key={itemIndex} className="product-item mb-4">
                                 <Row className="g-3 align-items-center">
                                   <Col xs={3}>
@@ -1129,7 +1136,7 @@ const Index = () => {
                   </Card>
                 ))}
 
-                {/* Bagian pengiriman dan pembayaran dipindah ke sini */}
+                {/* Bagian pengiriman dan pembayaran */}
                 <Row className="mt-4">
                   <Col md={8}></Col>
                   <Col md={4}>
@@ -1156,41 +1163,51 @@ const Index = () => {
                       </div>
 
                       <div className="payment-summary bg-light p-3 rounded">
-  <h5 className="section-title">
-    <i className="bi bi-credit-card me-2"></i>
-    Ringkasan Pembayaran
-  </h5>
-  <div className="d-flex justify-content-between mb-2">
-    <span>Subtotal:</span>
-    <span>Rp{group.subtotal.toLocaleString()}</span>
-  </div>
-  <div className="d-flex justify-content-between mb-3">
-    <span>Pengiriman:</span>
-    <span>Rp{parseFloat(group.shippingInfo.shipping_cost).toLocaleString()}</span>
-  </div>
-  <div className="d-flex justify-content-between fw-bold border-top pt-2">
-    <span>Total:</span>
-    <span className="text-success">
-      {/* Jumlahkan dulu baru konversi ke string */}
-      Rp{(group.subtotal + parseFloat(group.shippingInfo.shipping_cost)).toLocaleString()}
-    </span>
-  </div>
-</div>
+                        <h5 className="section-title">
+                          <i className="bi bi-credit-card me-2"></i>
+                          Ringkasan Pembayaran
+                        </h5>
+                        <div className="d-flex justify-content-between mb-2">
+                          <span>Subtotal:</span>
+                          <span>Rp{group.subtotal.toLocaleString()}</span>
+                        </div>
+                        <div className="d-flex justify-content-between mb-3">
+                          <span>Pengiriman:</span>
+                          <span>Rp{parseFloat(group.shippingInfo.shipping_cost).toLocaleString()}</span>
+                        </div>
+                        <div className="d-flex justify-content-between fw-bold border-top pt-2">
+                          <span>Total:</span>
+                          <span className="text-success">
+                            Rp{(group.subtotal + parseFloat(group.shippingInfo.shipping_cost)).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
-              </Card>
-            )
-          })
+            </Card>
+          ))
         ) : (
           <div className="text-center mt-5">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Memuat data pesanan...</p>
+            {orders.length === 0 ? (
+              <>
+              <Spinner animation="border" variant="primary" />
+              <p className="mt-3">Memuat data pesanan...</p>
+            </>
+            ) : (
+                <div className="container py-5">
+        <div className="alert alert-danger" role="alert">
+          <h4 className="alert-heading">Pembayaran Kosong!</h4> 
+          <p>Belum ada pesanan yang perlu diproses</p> 
+      </div>
+      </div>
+              
+              
+            )}
           </div>
         )}
 
-        {/* Tambahkan Modal1 dengan props yang benar */}
         <Modal1 
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}

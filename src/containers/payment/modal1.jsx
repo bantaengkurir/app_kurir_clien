@@ -17,9 +17,15 @@ const Modal1 = ({ isOpen, onClose, order, onSubmit }) => {
         amount: order.total // Pastikan mengirim total yang benar
       };
       
-      await onSubmit(paymentData);
+      if(paymentMethod == "transfer"){
+        toast.error("Maaf metode Pembayaran Ini Belum Didukung, Silahkan Pilih Metode Pembayaran Yang Lainnya!")
+        return;
+      }else{
+        await onSubmit(paymentData);
       toast.success('Pembayaran berhasil dikonfirmasi');
       onClose();
+      }
+      
     } catch (error) {
       toast.error(error.message);
       console.error("Error pembayaran:", error.message);
