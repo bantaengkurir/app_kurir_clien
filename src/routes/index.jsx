@@ -18,6 +18,7 @@ import Invoice from "../pages/Invoice";
 import Search from "../pages/Search";
 import NotFound from "../pages/404";
 import Payment from "../containers/payment";
+import OrderHistory from "../containers/orderHistory";
 // import Rating from "../containers/RatingModal";
 
 // import Navbar from "./components/Navbar";
@@ -118,6 +119,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <Payment />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/orderhistories',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <OrderHistory />
         // </ProtectedRoute>
       ),
     },
