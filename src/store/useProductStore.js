@@ -28,6 +28,7 @@ const useProductStore = create((set, get) => ({
     orders: [],
     shippings: [],
     ratings: [],
+    hostories: [],
     errorMessage: '',
 
     setErrorMessage: (message) => set({ errorMessage: message }),
@@ -723,6 +724,23 @@ const useProductStore = create((set, get) => ({
         }
     },
 
+    fetchHistories: async() => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("User tidak terautentikasi");
+                set({ histories: [] }); // Reset state jika tidak ada user
+                return;
+            }
+
+            const response = await axiosInstance.get("/order_histories");
+            set({ histories: response.data.data || [] }); // Handle jika response kosong
+        } catch (error) {
+            console.error("Error:", error);
+            set({ histories: [] }); // Reset state saat error
+            toast.error("Gagal memuat riwayat pesanan");
+        }
+    },
 }));
 
 export default useProductStore;

@@ -920,10 +920,10 @@
 // };
 
 // export default Index;
-
 import { 
   Card, 
-  Row, Col, Spinner, Badge, Button } from "react-bootstrap";
+  Row, Col, Spinner, Badge, Button 
+} from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import useProductStore from "../../store/useProductStore";
 import { useEffect, useState } from "react";
@@ -936,7 +936,7 @@ import toast from "react-hot-toast";
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus } = useProductStore();
+  const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus, fetchHistories, histories } = useProductStore();
 
   // Fungsi untuk mendapatkan daftar order_id yang sudah dibayar
   const getPaidOrderIds = () => {
@@ -945,7 +945,6 @@ const Index = () => {
 
   const handlePayment = (group) => {
     const calculatedTotal = group.subtotal + parseFloat(group.shippingInfo.shipping_cost);
-    
     
     setSelectedOrder({
       orderId: group.orderId,
@@ -977,7 +976,10 @@ const Index = () => {
   useEffect(() => {
     fetchOrder();
     fetchPayment();
-  }, [fetchOrder, fetchPayment]);
+    fetchHistories();
+  }, [fetchOrder, fetchPayment, fetchHistories]);
+
+  console.log("ini history", histories)
 
   const groupOrdersByTimeAndSeller = (orders) => {
     const grouped = {};
@@ -1002,7 +1004,8 @@ const Index = () => {
           paymentMethod: order.payment_method,
           sellers: {},
           shippingInfo: order.shipping_cost[0],
-          subtotal: 0
+          subtotal: 0,
+          courier: order.courier // Tambahkan informasi kurir
         };
       }
 
@@ -1036,6 +1039,7 @@ const Index = () => {
   };
 
   const groupedOrders = groupOrdersByTimeAndSeller(orders);
+  console.log("group order", groupedOrders)
 
   return (
     <>
@@ -1046,7 +1050,6 @@ const Index = () => {
         {Object.keys(groupedOrders).length > 0 ? (
           Object.entries(groupedOrders).map(([timeKey, group]) => (
             <Card key={timeKey} className="mb-4 main-time-card shadow">
-              {/* Bagian Card.Header dan Card.Body tetap sama seperti sebelumnya */}
               <Card.Header className="bg-primary text-white">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
@@ -1074,7 +1077,6 @@ const Index = () => {
                 {/* Daftar penjual dan produk */}
                 {Object.entries(group.sellers).map(([sellerKey, seller]) => (
                   <Card key={sellerKey} className="mb-4 seller-sub-card">
-                    {/* ... (isi Card.Body sama seperti sebelumnya) */}
                     <Card.Header className="bg-light">
                       <div className="d-flex align-items-center">
                         <img 
@@ -1151,6 +1153,16 @@ const Index = () => {
                             <i className="bi bi-geo-alt me-2"></i>
                             {group.shippingInfo.address}
                           </li>
+                          {/* Tambahkan informasi kurir */}
+                          <li>
+                            <i className="bi bi-person me-2"></i>
+                            <image src={group.courier?.profile_image || 'Belum ditentukan'} />
+                            Nama Kurir: {group.courier?.name || 'Belum ditentukan'}
+                          </li>
+                          <li>
+                            <i className="bi bi-phone me-2 "></i>
+                            Kontak Kurir: {group.courier?.phone_number || 'Belum ditentukan'}
+                          </li>
                           <li className="mb-2">
                             <i className="bi bi-currency-dollar me-2"></i>
                             Biaya: Rp{parseFloat(group.shippingInfo.shipping_cost).toLocaleString()}
@@ -1159,6 +1171,7 @@ const Index = () => {
                             <i className="bi bi-signpost me-2"></i>
                             Jarak: {group.shippingInfo.distance} meter
                           </li>
+                          
                         </ul>
                       </div>
 
