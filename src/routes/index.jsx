@@ -19,6 +19,8 @@ import Search from "../pages/Search";
 import NotFound from "../pages/404";
 import Payment from "../containers/payment";
 import OrderHistory from "../containers/orderHistory";
+import Kurir from "../containers/Tracking/CourierTracking";
+import Customer from "../containers/Tracking/OrderTracking";
 // import Rating from "../containers/RatingModal";
 
 // import Navbar from "./components/Navbar";
@@ -111,6 +113,22 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <Shop />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/kurir',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <Kurir />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/customer',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <Customer />
         // </ProtectedRoute>
       ),
     },

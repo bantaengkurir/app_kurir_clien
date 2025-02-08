@@ -54,3 +54,39 @@
     justify-content: center;
     margin-right: 15px;
 }
+
+
+/* Timeline styling */
+
+.timeline-card {
+    height: 500px;
+    overflow-y: auto;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid white;
+}
+
+
+/* Map styling */
+
+.map-card .leaflet-container {
+    z-index: 0;
+}
+
+.routing-instructions {
+    display: none;
+}
