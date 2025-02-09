@@ -14,7 +14,7 @@ class WebSocketService {
         if (this.socket) {
             this.disconnect(); // Tutup koneksi sebelumnya jika ada
         }
-        this.socket = new WebSocket(`wss://your-api.com/ws/tracking/${order_id}/`);
+        this.socket = new WebSocket(`http://localhost:8001/api/orders/${order_id}/`);
         this.socket.onmessage = (e) => {
             this.handleMessage(e);
         };

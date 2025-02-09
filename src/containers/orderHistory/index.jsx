@@ -674,17 +674,17 @@ const OrderMap = ({ order }) => {
   useEffect(() => {
    
 
-  if (order?.order_id) {
-	WebSocketService.connect(order.order_id);
+  if (order?.id) {
+	WebSocketService.connect(order.id);
 	WebSocketService.addCallback('location_update', handleLocationUpdate);
   }
 
-  console.log("order_id", order.order_id)
+  console.log("order_id", order.id)
   return () => {
 	WebSocketService.disconnect(); // Pastikan WebSocket diputus saat komponen di-unmount
 	routingControls.forEach(control => map?.removeControl(control));
   };
-}, [order?.order_id]); // Hanya jalankan ulang jika order_id berubah
+}, [order?.id]); // Hanya jalankan ulang jika order_id berubah
 
   // Handler update posisi kurir
   const handleLocationUpdate = (data) => {
