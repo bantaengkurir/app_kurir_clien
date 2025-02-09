@@ -668,6 +668,8 @@ const OrderMap = ({ order }) => {
     return !isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
   };
 
+  console.log("ini order", order)
+
   // Setup WebSocket
   useEffect(() => {
    
@@ -677,6 +679,7 @@ const OrderMap = ({ order }) => {
 	WebSocketService.addCallback('location_update', handleLocationUpdate);
   }
 
+  console.log("order_id", order.order_id)
   return () => {
 	WebSocketService.disconnect(); // Pastikan WebSocket diputus saat komponen di-unmount
 	routingControls.forEach(control => map?.removeControl(control));
@@ -977,24 +980,44 @@ const OrderMap = ({ order }) => {
   
 		  {selectedOrder && ['process', 'completed'].includes(activeTab) && (
   <Row className="mb-4">
-    {/* Kolom untuk peta */}
-    <Col md={6}>
-      {isCourier ? (
-        // Jika pengguna adalah kurir, tampilkan CourierTracking
-        <CourierTracking orderId={selectedOrder.order_id} courierId={selectedOrder.courier?.id} lnKurir={selectedOrder.courier[0]?.longitude} latKurir={selectedOrder.courier[0]?.latitude}/>
-      ) : (
-        // Jika pengguna adalah customer, tampilkan OrderTracking atau OrderMap
-        // <OrderMap order={selectedOrder} />
-		
-        <OrderTracking orderId={selectedOrder.order_id} customerId={selectedOrder.user_id} latCustomer={selectedOrder.shipping_cost[0]?.latitude} lnCustomer={selectedOrder.shipping_cost[0]?.longitude} />
-      )}
-    </Col>
-
-    {/* Kolom untuk timeline */}
-    <Col md={6}>
-      <Timeline order={selectedOrder} />
-    </Col>
-  </Row>
+  <Col md={6}>
+	{isCourier ? (
+	//   <OrderTracking
+	//   orderId={selectedOrder.order_id}
+	//   customerId={selectedOrder.user_id}
+	//   latCustomer={selectedOrder.shipping_cost[0]?.latitude}
+	//   lnCustomer={selectedOrder.shipping_cost[0]?.longitude}
+	// />
+	<CourierTracking 
+		orderId={selectedOrder.order_id} 
+		courierId={selectedOrder.courier?.id}		
+		latCourier={selectedOrder.courier?.latitude}
+		lnCourier={selectedOrder.courier?.longitude}
+		destination={[selectedOrder.courier?.latitude, selectedOrder.courier?.longitude]} // Koordinat tujuan (customer)
+	  />
+	) : (
+	  
+	//   <CourierTracking 
+	// 	orderId={selectedOrder.order_id} 
+	// 	courierId={selectedOrder.courier?.id}		
+	// 	latCourier={selectedOrder.courier?.latitude}
+	// 	lnCourier={selectedOrder.courier?.longitude}
+	// 	destination={[selectedOrder.courier?.latitude, selectedOrder.courier?.longitude]} // Koordinat tujuan (customer)
+	//   />
+	//   <OrderTracking
+	//   orderId={selectedOrder.order_id}
+	//   customerId={selectedOrder.user_id}
+	//   latCustomer={selectedOrder.shipping_cost[0]?.latitude}
+	//   lnCustomer={selectedOrder.shipping_cost[0]?.longitude}
+	//   destination={[selectedOrder.shipping_cost[0]?.latitude, selectedOrder.shipping_cost[0]?.longitude]}
+	// />
+	<OrderMap order={selectedOrder} />
+	)}
+  </Col>
+  <Col md={6}>
+	<Timeline order={selectedOrder} />
+  </Col>
+</Row>
 )}
   
 		  {!orders.length ? (

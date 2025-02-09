@@ -10,11 +10,11 @@ class WebSocketService {
         return WebSocketService.instance;
     }
 
-    connect(orderId) {
+    connect(order_id) {
         if (this.socket) {
             this.disconnect(); // Tutup koneksi sebelumnya jika ada
         }
-        this.socket = new WebSocket(`wss://your-api.com/ws/tracking/${orderId}/`);
+        this.socket = new WebSocket(`wss://your-api.com/ws/tracking/${order_id}/`);
         this.socket.onmessage = (e) => {
             this.handleMessage(e);
         };
