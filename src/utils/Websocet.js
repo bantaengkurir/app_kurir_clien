@@ -1,7 +1,13 @@
 class WebSocketService {
     static instance = null;
-    callbacks = {};
-    socket = null; // Inisialisasi socket sebagai null
+    callbacks = new Map(); // Gunakan Map untuk multiple listeners
+    socket = null;
+    reconnectAttempts = 0; // Tambahkan inisialisasi
+    subscriptions = new Set(); // Track active subscriptions
+
+
+
+
 
     static getInstance() {
         if (!WebSocketService.instance) {
@@ -10,43 +16,101 @@ class WebSocketService {
         return WebSocketService.instance;
     }
 
-    connect(order_id) {
-        if (this.socket) {
-            this.disconnect(); // Tutup koneksi sebelumnya jika ada
+    connect(orderId) {
+
+        if (this.subscriptions.has(orderId)) return;
+        this.subscriptions.add(orderId);
+
+        if (!orderId) {
+            console.error("Order ID is undefined");
+            return;
         }
-        this.socket = new WebSocket(`http://localhost:8001/api/orders/${order_id}/`);
+
+        if (this.socket) {
+            this.disconnect(); // Pastikan koneksi sebelumnya ditutup
+        }
+
+        const wsUrl = `http://localhost:8001/api/orders/${orderId}/`;
+        this.socket = new WebSocket(wsUrl);
+
+        this.socket.onopen = () => {
+            console.log("WebSocket connected");
+            // Reset reconnect attempt setelah berhasil
+            this.reconnectAttempts = 0;
+        };
+
         this.socket.onmessage = (e) => {
             this.handleMessage(e);
         };
-        this.socket.onclose = () => {
-            this.reconnect();
+
+        this.socket.onclose = (e) => {
+            if (e.wasClean) {
+                console.log("WebSocket ditutup secara normal");
+            } else {
+                console.log("WebSocket terputus tiba-tiba");
+                this.reconnect(orderId);
+            }
+        };
+
+        this.socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            // Trigger reconnect saat error
+            this.reconnect(orderId);
         };
     }
 
-    reconnect() {
-        setTimeout(() => {
-            this.connect();
-        }, 5000);
+    reconnect(orderId) {
+        // Batasi maksimal reconnect attempts
+        if (this.reconnectAttempts < 5) {
+            this.reconnectAttempts++;
+            setTimeout(() => {
+                console.log(`Reconnecting... Attempt ${this.reconnectAttempts}`);
+                this.connect(orderId);
+            }, 5000);
+        } else {
+            console.error("Gagal reconnect setelah 5 percobaan");
+        }
+    }
+
+
+
+
+    addCallback(type, callback) {
+        if (!this.callbacks.has(type)) {
+            this.callbacks.set(type, new Set());
+        }
+        this.callbacks.get(type).add(callback);
+    }
+
+    removeCallback(type, callback) {
+        if (this.callbacks.has(type)) {
+            this.callbacks.get(type).delete(callback);
+        }
     }
 
     handleMessage(e) {
-        const data = JSON.parse(e.data);
-        const callback = this.callbacks[data.type];
-        if (callback) {
-            callback(data);
+        try {
+            const data = JSON.parse(e.data);
+            const callbacks = this.callbacks.get(data.type) || [];
+            callbacks.forEach(cb => cb(data));
+        } catch (error) {
+            console.error("Error handling message:", error);
         }
     }
 
-    addCallback(type, callback) {
-        this.callbacks[type] = callback;
-    }
-
-    disconnect() {
-        if (this.socket) { // Cek apakah socket ada
-            this.socket.close();
-            this.socket = null; // Set socket ke null setelah ditutup
+    disconnect(orderId) {
+        this.subscriptions.delete(orderId);
+        if (this.subscriptions.size === 0) {
+            if (this.socket) {
+                // Hentikan reconnect jika disconnect manual
+                this.reconnectAttempts = 0;
+                this.socket.close();
+                this.socket = null;
+            }
         }
     }
+
+
 }
 
 export default WebSocketService.getInstance();

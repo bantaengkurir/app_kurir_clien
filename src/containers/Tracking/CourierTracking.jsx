@@ -80,12 +80,12 @@
 
 // export default CourierTracking;
 
-
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import io from "socket.io-client";
+import useProductStore from "../../store/useProductStore";
 
 // Fix untuk marker icons yang hilang
 delete L.Icon.Default.prototype._getIconUrl;
@@ -99,23 +99,38 @@ const CourierTracking = ({ orderId, courierId }) => {
   const [socket, setSocket] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState([-6.1754, 106.8272]); // Default Jakarta
+  const {updateCourierLocation, userData} = useProductStore(); // Ambil fungsi dari Zustand
+
+  console.log("courier id:", userData);
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const { latitude, longitude } = position.coords;
           console.log("Current location:", latitude, longitude);
           setCurrentLocation([latitude, longitude]);
           setMapCenter([latitude, longitude]);
 
-          if (socket) {
-            socket.emit("updateLocation", {
-              orderId,
-              courierId,
+          try {
+            // Update via Socket.io untuk realtime tracking
+            if (socket) {
+              socket.emit("updateLocation", {
+                orderId,
+                courierId,
+                latitude,
+                longitude,
+              });
+            }
+
+            // Update ke backend via Zustand
+            await updateCourierLocation(orderId, {
               latitude,
-              longitude,
+              longitude
             });
+            
+          } catch (error) {
+            console.error("Gagal update lokasi:", error);
           }
         },
         (error) => {
