@@ -20,6 +20,8 @@ import NotFound from "../pages/404";
 import Payment from "../containers/payment";
 import OrderHistory from "../containers/orderHistory";
 import Kurir from "../containers/Tracking/CourierTracking";
+import KurirLocation from "../containers/Courier/index";
+import KurirLocationUpdate from "../containers/Courier/HandlerLocationCourier";
 import Customer from "../containers/Tracking/OrderTracking";
 // import Rating from "../containers/RatingModal";
 
@@ -121,6 +123,22 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <Kurir />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/kurirlocation',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <KurirLocation />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/kurirlocationupdate',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <KurirLocationUpdate />
         // </ProtectedRoute>
       ),
     },

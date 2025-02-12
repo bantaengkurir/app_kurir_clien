@@ -650,6 +650,7 @@ import OrderTracking from "../Tracking/OrderTracking";
 import CourierTracking from "../Tracking/CourierTracking";
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import OrderHistories from "./OrderHistory";
 
 // Buat custom icon untuk kurir
 // const CourierIcon = L.icon({
@@ -1136,80 +1137,19 @@ useEffect(() => {
 	return format(new Date(date), dateFormat, { locale });
   };
   
-  const Timeline = ({ order }) => {
-	const statusHistory = [
-	  {
-		status: 'Pesanan Dibuat',
-		timestamp: order.order_date,
-		location: order.shipping_cost[0]?.address
-	  },
-	  {
-		status: 'Pembayaran',
-		timestamp: order.payment?.payment_date,
-		location: 'Sistem Pembayaran'
-	  }
-	];
-  
-	return (
-	  <Card className="timeline-card">
-		<Card.Header className="bg-info text-white">
-		  Riwayat Status
-		</Card.Header>
-		<Card.Body>
-		  {statusHistory.map((item, idx) => (
-			<div key={idx} className="timeline-item">
-			  <div className="timeline-marker"></div>
-			  <div className="timeline-content">
-				<h6 className="mb-1">{item.status}</h6>
-				<small className="text-muted">
-				  {safeFormatDate(item.timestamp, 'dd MMM yyyy HH:mm', id)}
-				</small>
-				<p className="mb-0 text-muted">{item.location}</p>
-			  </div>
-			</div>
-		  ))}
-		</Card.Body>
-	  </Card>
-	);
-  };
-  
+
   const Index = () => {
 	const [activeTab, setActiveTab] = useState('pending');
 	const [selectedOrder, setSelectedOrder] = useState(null);
-	const { fetchOrder, orders = [], fetchPayment, fetchHistories } = useProductStore();
+	const { fetchOrder, orders = [], fetchPayment, fetchHistoriesById } = useProductStore();
 	const currentUser = useProductStore((state) => state.currentUser); // Asumsikan currentUser 
   
 	useEffect(() => {
-		// const loadData = async () => {
-		// 	try {
-		// 	  await fetchOrder();
-		// 	  await fetchPayment();
-		// 	  await fetchHistories();
-			  
-		// 	  WebSocketService.addCallback('status_update', (data) => {
-		// 		useProductStore.setState(state => ({
-		// 		  orders: state.orders.map(order => 
-		// 			order.order_id === data.order_id ? {...order, status: data.status} : order
-		// 		  )
-		// 		}));
-		// 	  });
-		// 	} catch (error) {
-		// 	  toast.error("Gagal memuat data");
-		// 	}
-		//   };
-		//   loadData();
-		// return () => {
-		// 	WebSocketService.disconnect(); // Pastikan WebSocket diputus saat komponen di-unmount
-		//   };
-		// }, [fetchOrder, fetchPayment, fetchHistories]);
-
-
-
 		  const loadData = async () => {
             try {
                 await fetchOrder();
                 await fetchPayment();
-                await fetchHistories();
+                await fetchHistoriesById();
 
                 WebSocketService.addCallback('status_update', (data) => {
                     useProductStore.setState(state => ({
@@ -1229,7 +1169,7 @@ useEffect(() => {
   return () => {
     WebSocketService.removeCallback('status_update', loadData);
   };
-    }, [fetchOrder, fetchPayment, fetchHistories]);
+    }, [fetchOrder, fetchPayment, fetchHistoriesById]);
 
     // Tentukan apakah pengguna adalah kurir atau customer
     const isCourier = currentUser?.role === "courier";
@@ -1316,7 +1256,7 @@ useEffect(() => {
 	)}
   </Col>
   <Col md={6}>
-	<Timeline order={selectedOrder} />
+	<OrderHistories orderId={selectedOrder.order_id} />
   </Col>
 </Row>
 )}

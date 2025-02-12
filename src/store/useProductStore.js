@@ -1788,7 +1788,7 @@ const useProductStore = create((set, get) => ({
         }
     },
 
-    fetchHistories: async() => {
+    fetchHistoriesById: async(orderId) => {
         try {
             const userData = get().userData;
             if (!userData) {
@@ -1797,7 +1797,7 @@ const useProductStore = create((set, get) => ({
                 return;
             }
 
-            const response = await axiosInstance.get("/order_histories");
+            const response = await axiosInstance.get(`/orders/${orderId}`);
             set({ histories: response.data.data || [] }); // Handle jika response kosong
         } catch (error) {
             console.error("Error:", error);
@@ -1809,16 +1809,20 @@ const useProductStore = create((set, get) => ({
         try {
             const userData = get().userData;
             if (!userData) {
-                console.error("userData not found. Unable to update courier.");
+                console.error('userData not found. Unable to update courier.');
                 return;
             }
 
-            const response = await axiosInstance.put(`/orders/${courierId}/update-location`, courierData);
-            console.log("courier updated successfully:", response.data);
+            const response = await axiosInstance.put(
+                `/orders/${courierId}/update-location`,
+                courierData
+            );
+            console.log('courier updated successfully:', response.data);
+            toast.success('Courier location updated successfully');
             // Optionally, refetch the couriers to update the state
             get().fetchorders();
         } catch (error) {
-            console.error("Update courier error:", error);
+            console.error('Update courier error:', error);
         }
     },
 

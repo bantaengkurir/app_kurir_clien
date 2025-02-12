@@ -67,7 +67,7 @@ import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const { theme } = useThemeStore();
-  const { initSocket, disconnectSocket, isConnected } = useProductStore();
+  const { initSocket, disconnectSocket} = useProductStore();
 
   useEffect(() => {
     // Inisialisasi socket ketika komponen mount
@@ -79,20 +79,13 @@ const App = () => {
     };
   }, [initSocket, disconnectSocket]);
 
-  // Optional: Tampilkan status koneksi
-  useEffect(() => {
-    console.log("Connection status:", isConnected ? "Connected" : "Disconnected");
-  }, [isConnected]);
+
 
   return (
     <div data-theme={theme}>
       <Routers />
-      <Toaster />
+      <Toaster />     
       
-      {/* Optional: Tampilkan indikator status koneksi */}
-      <div className="connection-status">
-        {isConnected ? "🟢 Online" : "🔴 Offline"}
-      </div>
     </div>
   );
 };

@@ -2,11 +2,18 @@
 import { Link } from "react-router-dom";
 import  useAuthStore  from "../store/useAuthStore";
 import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import { useEffect } from "react";
+import useProductStore from "../store/useProductStore";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const { isConnected } = useProductStore();
 
-  console.log("auth navbar", authUser)
+
+    // Optional: Tampilkan status koneksi
+    useEffect(() => {
+      console.log("Connection status:", isConnected ? "Connected" : "Disconnected");
+    }, [isConnected]);
 
   return (
     <header
@@ -15,7 +22,12 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 h-16">
         <div className="flex items-center justify-between h-full">
+        
           <div className="flex items-center gap-8">
+              {/* Optional: Tampilkan indikator status koneksi */}
+      <div className="connection-status">
+        {isConnected ? "🟢 Online" : "🔴 Offline"}
+      </div>
             <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-all">
               <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <MessageSquare className="w-5 h-5 text-primary" />
