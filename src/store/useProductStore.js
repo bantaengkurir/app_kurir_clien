@@ -1352,6 +1352,7 @@ const useProductStore = create((set, get) => ({
 
     // clearSelectedCart: () => set({ selectedCart: [] }),
 
+
     toggleSellerSelection: (sellerId) => {
         set((state) => {
             const numericSellerId = Number(sellerId);
@@ -1759,17 +1760,34 @@ const useProductStore = create((set, get) => ({
         }
     },
 
-    updateOrderStatus: (orderId, newStatus) => {
-        set((state) => ({
-            orders: state.orders.map(order =>
-                order.order_id === orderId ? {
-                    ...order,
-                    status: newStatus,
-                    payment_status: newStatus === 'paid' ? 'completed' : 'pending'
-                } : order
-            )
-        }));
+    // updateOrderStatus: (orderId, newStatus) => {
+    //     set((state) => ({
+    //         orders: state.orders.map(order =>
+    //             order.order_id === orderId ? {
+    //                 ...order,
+    //                 status: newStatus,
+    //             } : order
+    //         )
+    //     }));
+    // },
+    updateOrderStatus: async(orderId, newStatus) => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("userData not found. Unable to update order status.");
+                return;
+            }
+
+            const response = await axiosInstance.put(`/orders/${orderId}/status`, newStatus);
+            console.log("Status pesanan berhasil diperbarui:", response.data);
+
+            // Refetch data pesanan untuk memperbarui state
+            get().fetchOrder();
+        } catch (error) {
+            console.error("Gagal memperbarui status pesanan:", error);
+        }
     },
+
 
 
     fetchPayment: async() => {
@@ -1789,11 +1807,17 @@ const useProductStore = create((set, get) => ({
     },
 
     fetchHistoriesById: async(orderId) => {
+        if (!orderId) {
+            console.warn("Order ID tidak ditemukan atau produk belum dipilih");
+            set({ histories: [] }); // Reset state jika orderId kosong
+            return;
+        }
+
         try {
             const userData = get().userData;
             if (!userData) {
                 console.error("User tidak terautentikasi");
-                set({ histories: [] }); // Reset state jika tidak ada user
+                set({ histories: [] });
                 return;
             }
 
@@ -1825,6 +1849,7 @@ const useProductStore = create((set, get) => ({
             console.error('Update courier error:', error);
         }
     },
+
 
     // New action to check online status
     isUserOnline: (userId) => {

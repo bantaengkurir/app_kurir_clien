@@ -482,7 +482,6 @@ const Cart = () => {
   
   const [expandedSellers, setExpandedSellers] = useState({});
   const navigate = useNavigate();
-  const FLAT_RATE = 3000;
 
   useEffect(() => {
     fetchCarts();
@@ -517,7 +516,7 @@ const Cart = () => {
   };
   
 
-  const total = selectedSubtotal + FLAT_RATE;
+  const total = selectedSubtotal;
 
   return (
     <>

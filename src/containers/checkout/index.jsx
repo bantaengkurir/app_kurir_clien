@@ -565,6 +565,8 @@ const Index = () => {
   return (
     <>
       {selectedCart.length === 0 ? (
+        <>
+        <Navbar />
         <div className="container py-5">
           <div className="alert alert-danger" role="alert">
             <h4 className="alert-heading">Keranjang Kosong!</h4>
@@ -573,6 +575,7 @@ const Index = () => {
             </p>
           </div>
         </div>
+        </>
       ) : (
         <>
           <Navbar />

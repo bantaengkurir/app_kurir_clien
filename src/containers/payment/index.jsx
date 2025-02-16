@@ -936,7 +936,7 @@ import toast from "react-hot-toast";
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus, fetchHistories, histories } = useProductStore();
+  const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus} = useProductStore();
 
   // Fungsi untuk mendapatkan daftar order_id yang sudah dibayar
   const getPaidOrderIds = () => {
@@ -976,10 +976,7 @@ const Index = () => {
   useEffect(() => {
     fetchOrder();
     fetchPayment();
-    fetchHistories();
-  }, [fetchOrder, fetchPayment, fetchHistories]);
-
-  console.log("ini history", histories)
+  }, [fetchOrder, fetchPayment]);
 
   const groupOrdersByTimeAndSeller = (orders) => {
     const grouped = {};
