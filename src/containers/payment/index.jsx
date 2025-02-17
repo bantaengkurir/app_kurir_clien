@@ -932,11 +932,13 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import Modal1 from './modal1';
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus} = useProductStore();
+  const navigate = useNavigate();
 
   // Fungsi untuk mendapatkan daftar order_id yang sudah dibayar
   const getPaidOrderIds = () => {
@@ -967,6 +969,7 @@ const Index = () => {
       setIsOpen(false);
       toast.success("Pembayaran berhasil diproses!");
       fetchOrder();
+      navigate("/orderhistories")
 
     } catch (error) {
       toast.error(`Gagal memproses pembayaran: ${error.message}`);

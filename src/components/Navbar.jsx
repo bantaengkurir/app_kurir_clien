@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import  useAuthStore  from "../store/useAuthStore";
-import { BaggageClaim, FolderClock, LogOut, MessageCircle, MessageSquare, Settings, ShoppingCart, User, Wallet } from "lucide-react";
+import { BaggageClaim, FolderClock, LogOut, MessageCircle, MessageCircleMore, MessageSquare, Settings, ShoppingCart, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import useProductStore from "../store/useProductStore";
 
@@ -50,7 +50,7 @@ const Navbar = () => {
         style={{ textDecoration: "none" }}
         className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition-colors text-decoration-non"
       >
-        <MessageCircle className="w-5 h-5" />
+        <MessageCircleMore className="w-5 h-5" />
         <span className="hidden sm:inline">Chat</span>
       </Link>
 

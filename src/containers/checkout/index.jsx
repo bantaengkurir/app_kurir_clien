@@ -521,7 +521,9 @@ const Index = () => {
 
       const order = await createOrder(orderData, setError); // Panggil createOrder
       toast.success("Pesanan berhasil dibuat!"); // Notifikasi sukses
-
+      
+      navigate("/payment");
+      window.location.reload();
       // Buka koneksi WebSocket setelah order berhasil dibuat
       const newSocket = io("http://localhost:5173", {
         query: {
@@ -538,8 +540,9 @@ const Index = () => {
         console.log("Courier location updated:", data);
         setCourierLocation({ lat: data.latitude, lng: data.longitude });
       });
-
+      window.location.reload();
       navigate("/payment");
+      
     } catch (error) {
       console.error("Error sending data:", error);
 

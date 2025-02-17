@@ -2,10 +2,12 @@ import { useState } from "react";
 import Icon from "../../../img/close.svg";
 import { Button, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Modal1 = ({ isOpen, onClose, order, onSubmit }) => {
   const [paymentMethod, setPaymentMethod] = useState('transfer');
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const Modal1 = ({ isOpen, onClose, order, onSubmit }) => {
       toast.success('Pembayaran berhasil dikonfirmasi');
       onClose();
       }
+      navigate("/orderhistories")
       
     } catch (error) {
       toast.error(error.message);

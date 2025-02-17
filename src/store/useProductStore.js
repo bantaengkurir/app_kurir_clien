@@ -1025,6 +1025,7 @@ const getUserDataFromCookie = () => {
 const useProductStore = create((set, get) => ({
     // Existing state
     user: null,
+    couriers: [],
     userData: getUserDataFromCookie(),
     productItems: [],
     productDesc: [],
@@ -1098,6 +1099,30 @@ const useProductStore = create((set, get) => ({
             set({ socket: null, isConnected: false });
         }
     },
+
+    fetchCouriers: async(id) => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("userData not found. Unable to fetch products.");
+                return;
+            }
+
+
+            const response = await axiosInstance.get(`/couriers/${id}`
+                //     {
+                //     headers: {
+                //         Authorization: `Bearer ${token}`,
+                //     },
+                // }
+            );
+            set({ couriers: response.data.data });
+            console.log("Fetched couriers successfully:", response.data.data);
+        } catch (error) {
+            console.error("Fetch couriers error:", error);
+        }
+    },
+
 
     fetchProducts: async() => {
         try {

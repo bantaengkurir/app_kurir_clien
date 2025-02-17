@@ -1896,10 +1896,13 @@ const navigate = useNavigate();
 
                     {/* Bagian kanan (info kurir dan ringkasan) */}
                     <Col md={4}>
-                      <Card className="mb-3">
+                    {
+                      order.status === 'process' &&(
+                        <Card className="mb-3">
                         <Card.Header className="bg-light">
                           <h5 className="mb-0">Info Kurir</h5>
                         </Card.Header>
+                        <button onClick={() => navigate(`/courierinformation/${order.courier?.id}`)}>
                         <Card.Body>
                           <div className="d-flex align-items-center">
                             <img
@@ -1913,7 +1916,35 @@ const navigate = useNavigate();
                             </div>
                           </div>
                         </Card.Body>
+                        </button>
                       </Card>
+                      )
+                    }
+                    {
+                      order.status === 'pending' &&(
+                        <Card className="mb-3">
+                        <Card.Header className="bg-light">
+                          <h5 className="mb-0">Info Kurir</h5>
+                        </Card.Header>
+                        <button onClick={() => navigate(`/courierinformation/${order.courier?.id}`)}>
+                        <Card.Body>
+                          <div className="d-flex align-items-center">
+                            <img
+                              src={order.courier?.profile_image}
+                              alt={order.courier?.name}
+                              className="seller-avatar me-3"
+                            />
+                            <div>
+                              <h6 className="mb-1">{order.courier?.name || 'N/A'}</h6>
+                              <small className="text-muted">{order.courier?.phone_number || 'N/A'}</small>
+                            </div>
+                          </div>
+                        </Card.Body>
+                        </button>
+                      </Card>
+                      )
+                    }
+                      
             
                       <Card>
                         <Card.Header className="bg-light">
