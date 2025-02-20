@@ -1038,6 +1038,8 @@ const useProductStore = create((set, get) => ({
     ratings: [],
     hostories: [],
     errorMessage: '',
+    productRatings: [],
+    courierRatings: [],
 
     setErrorMessage: (message) => set({ errorMessage: message }),
 
@@ -1874,6 +1876,62 @@ const useProductStore = create((set, get) => ({
             console.error('Update courier error:', error);
         }
     },
+
+    fetchRatProduct: async() => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("User tidak terautentikasi");
+                set({ productRatings: [] });
+                return;
+            }
+
+            const response = await axiosInstance.get(`/ratings`);
+            set({ productRatings: response.data.data || [] }); // Handle jika response kosong
+        } catch (error) {
+            console.error("Error:", error);
+            set({ productRatings: [] }); // Reset state saat error
+            toast.error("Gagal memuat riwayat pesanan");
+        }
+    },
+    fetchRatCourier: async() => {
+
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("User tidak terautentikasi");
+                set({ courierRatings: [] });
+                return;
+            }
+
+            const response = await axiosInstance.get("/ratings/courier");
+            set({ courierRatings: response.data.data || [] }); // Handle jika response kosong
+        } catch (error) {
+            console.error("Error:", error);
+            set({ courierRatings: [] }); // Reset state saat error
+            toast.error("Gagal memuat riwayat pesanan");
+        }
+    },
+
+    createRatCourier: async(ratingData) => {
+        const userData = get().userData; // Dapatkan userData dari state store
+
+        if (!userData) {
+            throw new Error("No userData available");
+        }
+
+        try {
+            const response = await axiosInstance.post("/ratings/courier", ratingData);
+            set((state) => ({
+                courierRatings: [...state.courierRatings, response.data.data],
+            }));
+            console.log("rating added successfully:", response.data.data);
+        } catch (error) {
+            console.error("Add rating error:", error);
+            throw error; // Re-throw the error to handle it in the component
+        }
+    },
+
 
 
     // New action to check online status

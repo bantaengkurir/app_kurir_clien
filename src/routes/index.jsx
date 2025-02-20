@@ -25,6 +25,7 @@ import KurirLocationUpdate from "../containers/Courier/HandlerLocationCourier";
 import Customer from "../containers/Tracking/OrderTracking";
 import CourierInfromation from "../containers/CourierInformation";
 import Chat from "../containers/Chat";
+import Rating from '../containers/Rating';
 // import Rating from "../containers/RatingModal";
 
 // import Navbar from "./components/Navbar";
@@ -181,6 +182,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <Chat />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/rating',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <Rating />
         // </ProtectedRoute>
       ),
     },

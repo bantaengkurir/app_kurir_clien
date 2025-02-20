@@ -1686,11 +1686,11 @@ const Index = () => {
 // const [selectedOrderId, setSelectedOrderId] = useState(null); // Untuk menyimpan ID pesanan yang dipilih
 const [showCancelModal, setShowCancelModal] = useState(false); // Untuk menampilkan modal konfirmasi pembatalan
 const [error, setError] = useState(null); // Untuk menyimpan pesan error
-const { cancelOrder, clearSelectedCart, toggleCartSelection } = useProductStore(); // Ambil fungsi cancelOrder dari store
+const { cancelOrder, clearSelectedCart, toggleCartSelection, createRatProduct, createRatCourier } = useProductStore(); // Ambil fungsi cancelOrder dari store
 
 const navigate = useNavigate();
 
-  console.log("order", orders);
+  console.log("selected order", selectedOrder);
 
   useEffect(() => {
     const loadData = async () => {
@@ -1788,6 +1788,59 @@ const navigate = useNavigate();
 
     // Arahkan pengguna ke halaman /cart
     navigate("/cart");
+  };
+
+  // const handleConfirm = async () => {
+  //   try {
+  //     // Update status order menjadi 'completed'
+  //     await useProductStore.getState().updateOrderStatus(selectedOrder.order_id, { status: 'completed' });
+
+  //     // // Membuat rating untuk produk
+  //     // const productRatingData = {
+  //     //   order_id: selectedOrder.order_id,
+  //     //   product_id: null,
+  //     //   rating: null,
+  //     //   comment: null,
+  //     // };
+  //     // await createRatProduct(productRatingData);
+
+  //     // Membuat rating untuk kurir
+  //     const courierRatingData = {
+  //       order_id: selectedOrder.order_id,
+  //       courier_id: null,
+  //       rating: null,
+  //       comment: null,
+  //       rating_time: new Date(),
+  //     };
+  //     await createRatCourier(courierRatingData);
+
+  //     // Tutup modal setelah semua proses selesai
+  //     setShowConfirmationModal(false);
+  //   } catch (error) {
+  //     console.error("Error during confirmation:", error);
+  //   }
+  // };
+
+  const handleConfirm = async () => {
+    try {
+      // Update status order menjadi 'completed'
+      await useProductStore.getState().updateOrderStatus(selectedOrder.order_id, { status: 'completed' });
+  
+      // Membuat rating untuk kurir
+      const courierRatingData = {
+        order_id: selectedOrder.order_id,
+        courier_id: selectedOrder.courier.id, // Ambil courier_id dari selectedOrder.courier.id
+        rating: null,
+        comment: null,
+        rating_time: new Date(),
+      };
+      await createRatCourier(courierRatingData);
+  
+      // Tutup modal
+      setShowConfirmationModal(false);
+    } catch (error) {
+      console.error("Error during confirmation:", error);
+    }
   };
 
   return (
@@ -2032,10 +2085,7 @@ const navigate = useNavigate();
     show={showConfirmationModal}
     onHide={() => setShowConfirmationModal(false)}
     order={selectedOrder} // Kirim order yang dipilih ke modal
-    onConfirm={() => {
-      useProductStore.getState().updateOrderStatus(selectedOrder.order_id, { status: 'completed' });
-      setShowConfirmationModal(false);
-    }}
+    onConfirm={handleConfirm}
     safeFormatDate={safeFormatDate}
   />
 )}

@@ -940,6 +940,8 @@ const Index = () => {
   const { fetchOrder, orders, fetchPayment, createPayment, payments, updateOrderStatus} = useProductStore();
   const navigate = useNavigate();
 
+  console.log("ini selected orders", selectedOrder)
+
   // Fungsi untuk mendapatkan daftar order_id yang sudah dibayar
   const getPaidOrderIds = () => {
     return new Set(payments.map(payment => payment.order_id));
@@ -963,7 +965,7 @@ const Index = () => {
       
       await createPayment(selectedOrder.orderId, paymentData);
       
-      const newStatus = paymentData.payment_method === 'COD' ? 'paid' : 'process';
+      const newStatus = paymentData.payment_method === 'COD' ? 'completed' : 'process';
       await updateOrderStatus(selectedOrder.orderId, newStatus);
       
       setIsOpen(false);
@@ -985,9 +987,11 @@ const Index = () => {
     const grouped = {};
     const paidOrderIds = getPaidOrderIds();
 
+    console.log("ini group payment", paidOrderIds)
+
     orders.forEach((order) => {
       // Skip order yang sudah memiliki pembayaran
-      if (paidOrderIds.has(order.order_id)) return;
+      if (paidOrderIds.has(order.order_id) || order.status === 'cancelled') return;
 
       const orderDate = new Date(order.shipping_cost?.[0]?.createdAt);
       if (!orderDate.getTime()) return;
