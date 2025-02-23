@@ -1,6 +1,6 @@
 // paymentForm.jsx
 import { useState } from 'react';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner,  } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import "./style.css"
 

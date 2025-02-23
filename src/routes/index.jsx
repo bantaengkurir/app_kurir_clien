@@ -26,6 +26,7 @@ import Customer from "../containers/Tracking/OrderTracking";
 import CourierInfromation from "../containers/CourierInformation";
 import Chat from "../containers/Chat";
 import Rating from '../containers/Rating';
+import RatingList from '../containers/Rating/Rating List';
 // import Rating from "../containers/RatingModal";
 
 // import Navbar from "./components/Navbar";
@@ -186,10 +187,18 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       ),
     },
     {
-      path: '/rating',
+      path: '/rating/:id/product&kurir',
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <Rating />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/ratinglist',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <RatingList />
         // </ProtectedRoute>
       ),
     },

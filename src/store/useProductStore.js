@@ -1040,6 +1040,7 @@ const useProductStore = create((set, get) => ({
     errorMessage: '',
     productRatings: [],
     courierRatings: [],
+    orderById: [],
 
     setErrorMessage: (message) => set({ errorMessage: message }),
 
@@ -1690,7 +1691,7 @@ const useProductStore = create((set, get) => ({
 
         try {
             const response = await axiosInstance.get(`/orders/${orderId}`);
-            return response.data; // Pastikan data dikembalikan dengan benar
+            set({ orderById: response.data.data || [] }); // Handle jika response kosong
         } catch (error) {
             console.error("Fetch order error:", error);
             throw error; // Pastikan error dilemparkan untuk ditangani di komponen
@@ -1929,6 +1930,43 @@ const useProductStore = create((set, get) => ({
         } catch (error) {
             console.error("Add rating error:", error);
             throw error; // Re-throw the error to handle it in the component
+        }
+    },
+
+    updateRatProduct: async(newRatData) => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error('userData not found. Unable to update courier.');
+                return;
+            }
+
+            const response = await axiosInstance.put(
+                `/ratings`,
+                newRatData
+            );
+            console.log('product rating updated successfully:', response.data);
+            toast.success('product rating updated successfully');
+        } catch (error) {
+            console.error('Update product rating error:', error);
+        }
+    },
+    updateRatCourier: async(newRatData) => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error('userData not found. Unable to update courier.');
+                return;
+            }
+
+            const response = await axiosInstance.put(
+                `/ratings/courier`,
+                newRatData
+            );
+            console.log('courier updated successfully:', response.data);
+            toast.success('Courier rating updated successfully');
+        } catch (error) {
+            console.error('Update courier error:', error);
         }
     },
 

@@ -4,7 +4,7 @@ import "./style.css";
 
 const Loading = () => (
     <div className="loader-container">
-      <div className="spinner"></div>
+      <div className=""></div>
     </div>
   );
   

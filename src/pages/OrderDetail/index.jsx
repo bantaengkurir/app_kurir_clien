@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import OrderDetail from "../../containers/detailOrders"
 const Loading = () => (
     <div className="loader-container">
-      <div className="spinner"></div>
+      <div className=""></div>
     </div>
   );
   
