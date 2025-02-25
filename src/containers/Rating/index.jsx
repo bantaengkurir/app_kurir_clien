@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Rate } from "antd"; // Impor Rate dari antd
 import { Container, Card, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import useProductStore from "../../store/useProductStore";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { RatingModal } from "./RatingModal";
 import ProductRatingSection from "./RatingSection";
 import RatingSectionCourier from "./RatingSectionCourier";
 import toast from "react-hot-toast";
+import { ArrowLeft } from "lucide-react";
 
 const ProductRating = () => {  
   const [review, setReview] = useState("");
@@ -93,7 +94,7 @@ const ProductRating = () => {
     try {
 
       if(hasNullRating === false) {
-        toast.error("Berikan penilaian produk terlebih dahulu")
+        toast.error("Ada satu atau beberapa penilaian produk yang belum dinilai")
       }else{
         const newData = {
           order_id: orderById.order_id, // Ambil order_id dari orderById
@@ -118,8 +119,17 @@ const ProductRating = () => {
     <Container className="my-4">
       <Card>
         <Card.Body>
-          <h4 className="mb-4">Nilai Produk</h4>
-
+          <div className="d-flex">
+            <span>
+            <Link style={{textDecoration: "none", font:"bold", color:"black"}} to="/ratinglist">
+            <ArrowLeft className="fw-bold me-3"/>
+            </Link>
+            </span>
+            <span>
+            <h4>Nilai Produk</h4>
+            </span>
+          </div>
+          
           <div className="alert alert-warning mb-4">
             ➤ Nilai untuk mendapatkan s/d 25 Koin Koin Shopee!
           </div>

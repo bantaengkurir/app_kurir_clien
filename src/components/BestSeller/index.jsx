@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useProductStore from "../../store/useProductStore";
 import { useEffect } from "react";
+import { Rate } from "antd";
 
 
 const index = () => {
@@ -62,12 +63,9 @@ const index = () => {
                   <a href="#" className="h5">
                     {product.name}
                   </a>
-                  <div className="d-flex my-3">
-                    <i className="fas fa-star text-primary"></i>
-                    <i className="fas fa-star text-primary"></i>
-                    <i className="fas fa-star text-primary"></i>
-                    <i className="fas fa-star text-primary"></i>
-                    <i className="fas fa-star"></i>
+                  <div className="d-flex my-3 align-items-center">
+                    <p className="me-2" >{product.rating}</p>
+                  <Rate className="mb-3 fs-6" disabled defaultValue={product.rating || 0} />
                   </div>
                   <h4 className="mb-3">{product.price}</h4>
                   <button

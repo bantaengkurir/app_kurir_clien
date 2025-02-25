@@ -4,6 +4,7 @@ import useProductStore from "../../store/useProductStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+import { Rate } from "antd";
 
 const Index = () => {
   const { productItems, fetchProducts, addCartItem } = useProductStore();
@@ -93,21 +94,25 @@ console.log("userData JWT:", userData);
                                 className="text-white bg-secondary px-3 py-1 rounded position-absolute"
                                 style={{ top: 10, left: 10 }}
                               >
-                                {product.name}
+                                {product.category}
                               </div>
                               <div className="p-4 fruite-product-content border-top-0 rounded-bottom">
-                                <h4>{product.name}</h4>
-                                <p>{product.description}</p>
+                                <h4 className="text-start">{product.name}</h4>
+                                <p className="text-start">{product.description.length > 50
+                           ? `${product.description.slice(0, 50)}...`
+                          : product.description
+                        }</p>
                                 <div className="fruite-product-footer">
                                   <p className="text-dark fs-5 fw-bold mb-0">
                                     {product.price} / kg
                                   </p>
                                 </div>
-                                <p className="text-dark fs-5 mb-0 text-end">
-                                  Stock: {product.stock}
+                                <p className="text-dark fs-6 mb-0 text-end">
+                                  Sold: {product.total_sold || 0}
                                 </p>
                               </div>
-                              <div className="d-flex justify-content-end">
+                              <div className="d-flex justify-content-between align-items-center">
+                              <p className="ms-3" >{product.rating} <i className="fa-solid fa-star" style={{color: "yellow"}}></i></p>
                                 <button
                                   onClick={() => handleAddToCart(product)}
                                   className="btn border border-secondary rounded-pill px-3 text-primary ms-2 me-2 mb-3"

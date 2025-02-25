@@ -43,6 +43,7 @@ import  useAuthStore  from "../store/useAuthStore";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
+import CourierOrderDetail from '../containers/CourierOrderDetail';
 // import { Toaster } from "react-hot-toast";
 
 const Index = () => {
@@ -199,6 +200,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <RatingList />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/courier/:id/courier&order_detail',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <CourierOrderDetail />
         // </ProtectedRoute>
       ),
     },

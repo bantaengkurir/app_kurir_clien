@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import  useAuthStore  from "../store/useAuthStore";
-import { BaggageClaim, FolderClock, LogOut, MessageCircle, MessageCircleMore, MessageSquare, Settings, ShoppingCart, User, Wallet } from "lucide-react";
+import { BaggageClaim, FolderClock, LogOut, MessageCircle, MessageCircleMore, MessageSquare, Rat, RatIcon, RatioIcon, Settings, ShoppingCart, Sparkles, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import useProductStore from "../store/useProductStore";
 
@@ -125,6 +125,14 @@ const Navbar = () => {
                   >
                     <FolderClock className="size-5" />
                     <span>Order History</span>
+                  </Link>
+                  <Link
+                    to="/ratinglist"
+                    style={{ textDecoration: "none", color: "black" }}
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition-colors"
+                  >
+                    <Sparkles className="size-5" />
+                    <span>Ratings</span>
                   </Link>
 
                   <button

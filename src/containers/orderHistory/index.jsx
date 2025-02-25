@@ -1825,6 +1825,7 @@ const navigate = useNavigate();
     try {
       // Update status order menjadi 'completed'
       await useProductStore.getState().updateOrderStatus(selectedOrder.order_id, { status: 'completed' });
+      
   
       // Membuat rating untuk kurir
       const courierRatingData = {
@@ -1838,6 +1839,9 @@ const navigate = useNavigate();
   
       // Tutup modal
       setShowConfirmationModal(false);
+      
+      navigate("/ratinglist")
+      window.location.reload();
     } catch (error) {
       console.error("Error during confirmation:", error);
     }

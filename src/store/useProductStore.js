@@ -1636,7 +1636,7 @@ const useProductStore = create((set, get) => ({
             get().clearSelectedCart(); // Otomatis hapus dari localStorage
 
         } catch (error) {
-            console.error("Create order error:", error);
+            // console.error("Create order error:", error);
 
             // Penanganan error yang lebih baik
             if (error.response) {

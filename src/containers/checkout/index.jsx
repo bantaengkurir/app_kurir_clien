@@ -495,6 +495,8 @@ const Index = () => {
       return;
     }
 
+    
+
     const orderData = {
       items: selectedCart.map((item) => ({
         product_id: item.product.id,
@@ -509,6 +511,8 @@ const Index = () => {
 
     console.log("Order Data:", orderData);
 
+    console.log("error message", error.message)
+
     try {
       // Validasi stok produk
       for (let i = 0; i < selectedCart.length; i++) {
@@ -518,45 +522,73 @@ const Index = () => {
           return;
         }
       }
+      // if(error.message == "Tidak ada courier yang tersedia"){
+      //   toast.error("Kurir tidak tersedia")
+      // }else{
+      //   const order = await createOrder(orderData, setError); // Panggil createOrder
+      //   toast.success("Pesanan berhasil dibuat!"); // Notifikasi sukses
+        
+      //   // navigate("/payment");
 
-      const order = await createOrder(orderData, setError); // Panggil createOrder
-      toast.success("Pesanan berhasil dibuat!"); // Notifikasi sukses
-      
-      navigate("/payment");
+      //   window.location.reload();
+      //   // Buka koneksi WebSocket setelah order berhasil dibuat
+      //   const newSocket = io("http://localhost:5173", {
+      //     query: {
+      //       userId: order.user_id, // ID customer
+      //       role: "customer",
+      //       orderId: order.id, // ID order
+      //     },
+      //   });
+  
+      //   setSocket(newSocket);
+  
+      //   // Terima update lokasi kurir
+      //   newSocket.on("locationUpdated", (data) => {
+      //     console.log("Courier location updated:", data);
+      //     setCourierLocation({ lat: data.latitude, lng: data.longitude });
+      //   });
+      //   window.location.reload();
+      //   navigate("/payment");
+      // }
+
+      // Panggil API untuk membuat pesanan
+      const order = await createOrder(orderData, setError);
+
+      // Jika pesanan berhasil dibuat, tampilkan notifikasi sukses
+      // toast.success("Pesanan berhasil dibuat!");
       window.location.reload();
+  
       // Buka koneksi WebSocket setelah order berhasil dibuat
       const newSocket = io("http://localhost:5173", {
-        query: {
-          userId: order.user_id, // ID customer
-          role: "customer",
-          orderId: order.id, // ID order
-        },
+          query: {
+              userId: order.user_id, // ID customer
+              role: "customer",
+              orderId: order.id, // ID order
+          },
       });
-
+  
       setSocket(newSocket);
-
+  
       // Terima update lokasi kurir
       newSocket.on("locationUpdated", (data) => {
-        console.log("Courier location updated:", data);
-        setCourierLocation({ lat: data.latitude, lng: data.longitude });
+          console.log("Courier location updated:", data);
+          setCourierLocation({ lat: data.latitude, lng: data.longitude });
       });
-      window.location.reload();
+      // Redirect ke halaman pembayaran hanya jika tidak ada error
       navigate("/payment");
-      
-    } catch (error) {
-      console.error("Error sending data:", error);
+  
+  
 
-      // Penanganan error yang lebih baik
-      if (error.response) {
-        setError(error.response.data?.message || "Failed to create order.");
-      } else if (error.request) {
-        setError("No response from server. Please check your connection.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
+} catch (error) {
+    // Tangkap error dan tampilkan notifikasi sesuai pesan error
+    if (error.message === "Tidak ada courier yang tersedia") {
+        toast.error("Kurir tidak tersedia");
+    } 
+    // else {
+    //     // Handle error lainnya jika diperlukan
+    //     toast.error("Terjadi kesalahan saat membuat pesanan");
+    // }
+  }
   };
 
   // Fungsi untuk membersihkan keranjang
@@ -574,7 +606,7 @@ const Index = () => {
           <div className="alert alert-danger" role="alert">
             <h4 className="alert-heading">Keranjang Kosong!</h4>
             <p>
-              Silakan kembali ke <a href="/cart">halaman toko</a> untuk menambahkan produk ke keranjang.
+              Silakan ke <a href="/payment">halaman pembayaran</a> atau kembali ke <a href="/cart">halaman cart </a>untuk menambahkan produk ke keranjang.
             </p>
           </div>
         </div>
