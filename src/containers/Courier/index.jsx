@@ -8,11 +8,41 @@ import { Badge, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, isValid } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import Pusher from "pusher-js";
+import OrderPopup from "./PopupConfirm";
 
 function Courier() {
   const userData = useProductStore((state) => state.userData);
   const { fetchOrder, courierOrders } = useOrderCourierStore();
   const [loading, setLoading] = useState(true);
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [orderDetails, setOrderDetails] = useState({ items: [] });
+
+  console.log("Order Details:", orderDetails); // Log order details
+
+  useEffect(() => {
+    const pusher = new Pusher('c39e4f4073b4e24a6ad5', {
+      cluster: 'ap1',
+      encrypted: true,
+    });
+  
+    const channel = pusher.subscribe('orders');
+    channel.bind('new-order', (data) => {
+      console.log("Event 'new-order' diterima:", data); // Log data yang diterima
+      setOrderDetails(data);
+      setShowPopup(true);
+    });
+  
+    return () => {
+      pusher.unsubscribe('orders');
+    };
+  }, []);
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+  
 
   const navigate = useNavigate();
 
@@ -191,6 +221,7 @@ function Courier() {
             )}
           </Card.Body>
         </Card>
+        <OrderPopup show={showPopup} onHide={handleClosePopup} orderDetails={orderDetails} />
       </Container>
     </>
   );

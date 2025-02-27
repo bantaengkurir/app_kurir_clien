@@ -203,7 +203,7 @@ function CourierOrderDetail() {
   const userData = useProductStore((state) => state.userData);
   const { fetchOrderById, courierOrderById } = useOrderCourierStore();
   const [loading, setLoading] = useState(true);
-  
+
   // Koordinat contoh (harap ganti dengan data sebenarnya dari API)
   const [locations, setLocations] = useState({
     customer: { lat: -6.200000, lng: 106.816666 }, // Contoh koordinat Jakarta
@@ -240,7 +240,7 @@ useEffect(() => {
 	  }
 	};
 	loadData();
-  }, [id, fetchOrderById, courierOrderById]);
+  }, [id, fetchOrderById]);
 
   console.log("ini order id", courierOrderById)
   
@@ -250,28 +250,55 @@ useEffect(() => {
     return format(new Date(date), dateFormat, { locale });
   };
 
-  const groupItemsBySeller = (items) => {
-	return items.reduce((acc, item) => {
-	  // Gunakan seller_name sebagai kunci unik
-	  const sellerKey = item.seller_name;
+  // const groupItemsBySeller = (items) => {
+	// return items.reduce((acc, item) => {
+	//   // Gunakan seller_name sebagai kunci unik
+	//   const sellerKey = item.seller_name;
   
-	  if (!acc[sellerKey]) {
-		acc[sellerKey] = {
-		  sellerInfo: {
-			id: sellerKey, // Gunakan seller_name sebagai ID sementara
-			name: item.seller_name,
-			address: item.seller_address,
-			image: item.seller_profile_image,
-			latitude: item.seller_latitude, // Tambahkan latitude
-			longitude: item.seller_longitude, // Tambahkan longitude
-		  },
-		  items: [],
-		};
-	  }
-	  acc[sellerKey].items.push(item);
-	  return acc;
-	}, {});
+	//   if (!acc[sellerKey]) {
+	// 	acc[sellerKey] = {
+	// 	  sellerInfo: {
+	// 		id: sellerKey, // Gunakan seller_name sebagai ID sementara
+	// 		name: item.seller_name,
+	// 		address: item.seller_address,
+	// 		image: item.seller_profile_image,
+	// 		latitude: item.seller_latitude, // Tambahkan latitude
+	// 		longitude: item.seller_longitude, // Tambahkan longitude
+	// 	  },
+	// 	  items: [],
+	// 	};
+	//   }
+	//   acc[sellerKey].items.push(item);
+	//   return acc;
+	// }, {});
+  // };
+
+
+  const groupItemsBySeller = (items) => {
+    if (!items || !Array.isArray(items)) {
+      return {}; // Kembalikan objek kosong jika items tidak terdefinisi atau bukan array
+    }
+    return items.reduce((acc, item) => {
+      const sellerKey = item.seller_name;
+      if (!acc[sellerKey]) {
+        acc[sellerKey] = {
+          sellerInfo: {
+            id: sellerKey,
+            name: item.seller_name,
+            address: item.seller_address,
+            image: item.seller_profile_image,
+            latitude: item.seller_latitude,
+            longitude: item.seller_longitude,
+          },
+          items: [],
+        };
+      }
+      acc[sellerKey].items.push(item);
+      return acc;
+    }, {});
   };
+
+
 
   console.log("group seller", groupItemsBySeller(courierOrderById.items))
 
@@ -300,13 +327,15 @@ useEffect(() => {
     );
   }
 
-  if (!courierOrderById) {
+  if (!courierOrderById || !courierOrderById.items) {
     return (
       <div className="text-center mt-5">
-        <p>Pesanan tidak ditemukan.</p>
+        <p>Data pesanan belum tersedia.</p>
       </div>
     );
   }
+
+
 
   return (
     <>
@@ -375,14 +404,14 @@ useEffect(() => {
           </Col>
 
 {/* Alamat Seller(s) */}
-<Row className="mb-4">
+<Row className="mb-4 w-100">
   {Object.values(groupItemsBySeller(courierOrderById.items)).map((seller) => (
     <Col md={6} className="mb-3" key={seller.sellerInfo.id}>
       <Card 
-        className="h-100 shadow-sm clickable-card"
+        className="w-100 shadow-sm clickable-card"
         onClick={() => handleAddressClick(seller.sellerInfo.address)}
       >
-        <Card.Body>
+        <Card.Body >
           <Card.Title>🏪 {seller.sellerInfo.name}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">Alamat Seller</Card.Subtitle>
           <Card.Text>{seller.sellerInfo.address}</Card.Text>
