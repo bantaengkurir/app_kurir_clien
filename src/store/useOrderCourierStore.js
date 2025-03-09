@@ -19,7 +19,7 @@ const getUserDataFromCookie = () => {
 const useOrderCourierStore = create((set, get) => ({
     // Existing state
     user: null,
-    couriers: [],
+    sellers: [],
     userData: getUserDataFromCookie(),
     productItems: [],
     productDesc: [],
@@ -35,6 +35,12 @@ const useOrderCourierStore = create((set, get) => ({
     productRatings: [],
     courierRatings: [],
     courierOrderById: [],
+    courierEarnings: [],
+    totalPages: 1, // Tambahkan state untuk totalPages
+    currentPage: 1, // Tambahkan state untuk currentPage
+    itemsPerPage: 10, // Tambahkan state untuk itemsPerPage
+    selectedDate: "", // Tambahkan state untuk selectedDate
+    midtrans: [],
 
     setErrorMessage: (message) => set({ errorMessage: message }),
 
@@ -94,6 +100,30 @@ const useOrderCourierStore = create((set, get) => ({
             socket.emit("userOffline", userData.id);
             socket.disconnect();
             set({ socket: null, isConnected: false });
+        }
+    },
+
+
+    fetchSeller: async(id) => {
+        try {
+            const userData = get().userData;
+            if (!userData) {
+                console.error("userData not found. Unable to fetch products.");
+                return;
+            }
+
+
+            const response = await axiosInstance.get(`/couriers/${id}`
+                //     {
+                //     headers: {
+                //         Authorization: `Bearer ${token}`,
+                //     },
+                // }
+            );
+            set({ sellers: response.data.data });
+            console.log("Fetched couriers successfully:", response.data.data);
+        } catch (error) {
+            console.error("Fetch couriers error:", error);
         }
     },
 
@@ -351,6 +381,250 @@ const useOrderCourierStore = create((set, get) => ({
             console.error('Update courier error:', error);
         }
     },
+
+    // fetchCourierEarning: async() => {
+    //     try {
+    //         const userData = get().userData;
+    //         if (!userData) {
+    //             console.error("userData not found. Unable to fetch products.");
+    //             return;
+    //         }
+
+    //         const response = await axiosInstance.get("/earnings", );
+    //         set({ courierEarnings: response.data.data });
+    //         console.log("Fetched earnings successfully:", response.data.data);
+    //     } catch (error) {
+    //         console.error("Fetch earnings error:", error);
+    //     }
+    // },
+
+    // fetchCourierEarning: async(selectedDate) => {
+    //     try {
+    //         const userData = get().userData;
+    //         if (!userData) {
+    //             console.error("userData not found. Unable to fetch earnings.");
+    //             return;
+    //         }
+
+    //         console.log("Fetching earnings for date:", selectedDate); // Debugging
+
+    //         const response = await axiosInstance.get("/earnings", {
+    //             params: {
+    //                 date: selectedDate, // Kirim tanggal sebagai query parameter
+    //             },
+    //         });
+
+
+
+    //         console.log("Fetched earnings successfully:", response.data.data); // Debugging
+
+    //         const earnings = response.data.data;
+
+    //         // Hitung totalEarnings secara manual
+    //         const total = earnings.reduce(
+    //             (total, earning) => total + parseFloat(earning.courier_earning || 0),
+    //             0
+    //         );
+
+    //         set({ courierEarnings: response.data.data, totalEarnings: total, isLoading: false });
+
+    //         // set({ courierEarnings: response.data.data }); // Perbarui state dengan data yang difilter
+    //     } catch (error) {
+    //         console.error("Fetch earnings error:", error);
+    //     }
+    // },
+
+    // // fetchCourierEarning: async(selectedDate) => {
+    // //     try {
+    // //         const userData = get().userData;
+    // //         if (!userData) {
+    // //             console.error("userData not found. Unable to fetch earnings.");
+    // //             return;
+    // //         }
+
+    // //         console.log("Fetching earnings for date:", selectedDate); // Debugging
+
+    // //         const response = await axiosInstance.get("/earnings", {
+    // //             params: {
+    // //                 date: selectedDate, // Kirim tanggal sebagai query parameter
+    // //             },
+    // //         });
+
+
+    // //         const earnings = response.data.data;
+
+    // //         // Hitung totalEarnings secara manual
+    // //         const total = earnings.reduce(
+    // //             (total, earning) => total + parseFloat(earning.courier_earning || 0),
+    // //             0
+    // //         );
+
+    // //         set({ courierEarnings: response.data.data, totalEarnings: total, isLoading: false });
+
+
+    // //         console.log("Fetched earnings successfully:", response.data.data); // Debugging
+
+    // //         //         set({ courierEarnings: response.data.data }); // Perbarui state dengan data yang difilter
+    // //     } catch (error) {
+    // //         console.error("Fetch earnings error:", error);
+    // //     }
+    // // },
+
+    // createMidtrans: async(transactionData) => {
+    //     const userData = get().userData; // Dapatkan userData dari state store
+
+    //     if (!userData) {
+    //         throw new Error("No userData available");
+    //     }
+
+    //     set({ isPaymentLoading: true, error: null });
+
+    //     try {
+    //         const response = await axios.post("/create-transaction", transactionData);
+    //         set((state) => ({
+    //             midtrans: [...state.midtrans, response.data.data], // Simpan data transaksi ke state
+    //         }));
+    //         console.log("Transaction created successfully:", response.data.data);
+
+    //         // Redirect ke halaman pembayaran Midtrans
+    //         window.location.href = response.data.data.redirect_url;
+    //     } catch (error) {
+    //         console.error("Create transaction error:", error);
+    //         set({ error: "Gagal membuat transaksi. Silakan coba lagi." });
+    //         throw error; // Re-throw the error to handle it in the component
+    //     } finally {
+    //         set({ isPaymentLoading: false });
+    //     }
+    // },
+
+
+
+    fetchCourierEarning: async(selectedDate) => {
+        try {
+            const { userData } = get();
+            if (!userData) throw new Error("User tidak valid");
+
+            set({ isLoading: true, error: null });
+
+            const response = await axiosInstance.get(`/earnings`, {
+                params: {
+                    date: selectedDate,
+                },
+            });
+
+            const earnings = response.data.data;
+            const total = earnings.reduce((acc, curr) => acc + Number(curr.courier_earning), 0);
+
+            set({
+                courierEarnings: earnings,
+                totalEarnings: total,
+                isLoading: false,
+            });
+        } catch (error) {
+            set({
+                error: error.response.data.message || error.message,
+                isLoading: false,
+            });
+            throw error;
+        }
+    },
+
+    // createMidtrans: async(transactionData) => {
+    //     try {
+    //         const { userData } = get();
+    //         if (!userData.id) throw new Error("User tidak valid");
+
+    //         set({ isPaymentLoading: true, error: null });
+
+    //         const response = await axiosInstance.post('/midtrans/create-transaction', {
+    //             ...transactionData,
+    //             courier_id: userData.id,
+    //         });
+
+    //         if (response.data.redirect_url) {
+    //             window.location.href = response.data.redirect_url;
+    //         }
+
+    //         return response.data;
+    //     } catch (error) {
+    //         const errorMessage = error.response.data.message || error.message;
+    //         set({ error: errorMessage });
+    //         throw new Error(errorMessage);
+    //     } finally {
+    //         set({ isPaymentLoading: false });
+    //     }
+    // },
+
+    createMidtrans: async(transactionData) => {
+        try {
+            const { userData } = get();
+            if (!userData.id) throw new Error("User tidak valid");
+
+            set({ isPaymentLoading: true, error: null });
+
+            const response = await axiosInstance.post('/midtrans/create-transaction', {
+                ...transactionData,
+                courier_id: userData.id,
+            });
+
+            console.log("ini midtr", response.data.data)
+
+            if (response.data.data.redirect_url) {
+                // Redirect ke halaman pembayaran Midtrans
+                window.location.href = response.data.data.redirect_url;
+            }
+
+            return response.data;
+        } catch (error) {
+            const errorMessage = error.response.data.message || error.message;
+            set({ error: errorMessage });
+            throw new Error(errorMessage);
+        } finally {
+            set({ isPaymentLoading: false });
+        }
+    },
+
+    // Computed values
+    totalEarnings: () => {
+        return get().courierEarnings.reduce(
+            (total, earning) => total + parseFloat(earning.courier_earning || 0),
+            0
+        );
+    },
+
+    // Fungsi untuk mengambil data penghasilan kurir
+    // fetchCourierEarning: async(page = 1, limit = 10, selectedDate = "") => {
+    //     try {
+    //         const userData = get().userData;
+    //         if (!userData) {
+    //             console.error("userData not found. Unable to fetch earnings.");
+    //             return;
+    //         }
+
+    //         // Kirim query parameter ke backend
+    //         const response = await axiosInstance.get("/earnings", {
+    //             params: {
+    //                 page,
+    //                 limit,
+    //                 start_date: selectedDate,
+    //                 end_date: selectedDate,
+    //             },
+    //         });
+
+    //         // Simpan data dan informasi pagination ke state
+    //         set({
+    //             courierEarnings: response.data.data,
+    //             totalPages: response.data.pagination.total_pages,
+    //             currentPage: page,
+    //             itemsPerPage: limit,
+    //             selectedDate,
+    //         });
+
+    //         console.log("Fetched earnings successfully:", response.data.data);
+    //     } catch (error) {
+    //         console.error("Fetch earnings error:", error);
+    //     }
+    // },
 
 
 

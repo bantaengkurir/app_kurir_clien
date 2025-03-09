@@ -1,53 +1,19 @@
-// import React from "react";
-// import { Modal, Button, Card } from "react-bootstrap";
-
-// const OrderPopup = ({ show, onHide, orderDetails }) => {
-
-//   if (!orderDetails || !orderDetails.items) {
-//     return null; // atau tampilkan pesan "Data tidak tersedia"
-//   }
-
-//   return (
-//     <div className={`modal-1-overlay ${show ? "open" : ""}`}>
-//       <div className="modal-1-modal">
-//         <Card show={show} onHide={onHide}>
-//           <Card.Header closeButton>
-//             <Card.Title>Pesanan Baru</Card.Title>
-//           </Card.Header>
-//           <Card.Body>
-//             <p>Anda memiliki pesanan baru:</p>
-//             <ul>
-//               {orderDetails.items.map((item, index) => (
-//                 <li key={index}>
-//                   {item.name} - {item.quantity} x Rp{item.price}
-//                 </li>
-//               ))}
-//             </ul>
-//             <p>Total: Rp{orderDetails.total}</p>
-//           </Card.Body>
-//           <Card.Footer>
-//             <Button variant="secondary" onClick={onHide}>
-//               Tutup
-//             </Button>
-//             <Button variant="primary" onClick={onHide}>
-//               Terima Pesanan
-//             </Button>
-//           </Card.Footer>
-//         </Card>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default OrderPopup;
-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal, Button, Card } from 'react-bootstrap';
 import useOrderCourierStore from '../../store/useOrderCourierStore';
 import toast from 'react-hot-toast';
+import notif from "../../assets/sound/ada_pesanan.mp3";
 
 const OrderPopup = ({ show, onHide, orderDetails }) => {
   const updateOrderStatus = useOrderCourierStore((state) => state.updateOrderStatus);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (show && audioRef.current) {
+      audioRef.current.play();
+    }
+  }, [show]);
+
 
   if (!orderDetails) return null;
 
@@ -100,6 +66,7 @@ const handleUpdate = async () => {
       </Card.Footer>
     </Card>
     </div>
+    <audio ref={audioRef} src={notif} preload="auto" />
     </div>
   );
 };

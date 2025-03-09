@@ -1,0 +1,31 @@
+/* CourierEarning.css */
+
+.hover-effect:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
+}
+
+.shadow-lg {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}

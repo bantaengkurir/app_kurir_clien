@@ -59,6 +59,8 @@ const ChatContainer = () => {
     fetchData();
   }, [id, fetchCouriers, setSelectedUser]);
 
+  console.log("ini adalah selected user chat", selectedUser)
+
   // Fetch messages and subscribe to new messages
   useEffect(() => {
     if (selectedUser?.id) {

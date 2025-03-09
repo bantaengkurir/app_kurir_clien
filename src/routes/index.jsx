@@ -25,6 +25,7 @@ import KurirLocationUpdate from "../containers/Courier/HandlerLocationCourier";
 import Customer from "../containers/Tracking/OrderTracking";
 import CourierInfromation from "../containers/CourierInformation";
 import Chat from "../containers/Chat";
+import ChatSeller from "../containers/CourierOrderDetail/Chat";
 import Rating from '../containers/Rating';
 import RatingList from '../containers/Rating/Rating List';
 // import Rating from "../containers/RatingModal";
@@ -44,6 +45,8 @@ import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import CourierOrderDetail from '../containers/CourierOrderDetail';
+import CourierSallery from '../containers/Couriersallery';
+import CourierEarning from '../containers/CourierEarning';
 // import { Toaster } from "react-hot-toast";
 
 const Index = () => {
@@ -208,6 +211,22 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       element: (
         // <ProtectedRoute allowedRole='customer' >
           <CourierOrderDetail />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/chatSeller/:id',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <ChatSeller />
+        // </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/courier&sallery',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <CourierEarning />
         // </ProtectedRoute>
       ),
     },

@@ -1840,8 +1840,8 @@ const navigate = useNavigate();
       // Tutup modal
       setShowConfirmationModal(false);
       
-      navigate("/ratinglist")
-      window.location.reload();
+      // navigate("/ratinglist")
+      // window.location.reload();
     } catch (error) {
       console.error("Error during confirmation:", error);
     }
