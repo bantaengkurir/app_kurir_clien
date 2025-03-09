@@ -576,7 +576,7 @@ const useOrderCourierStore = create((set, get) => ({
 
             return response.data;
         } catch (error) {
-            const errorMessage = error.response.data.message || error.message;
+            const errorMessage = error.response.data.error || error.message;
             set({ error: errorMessage });
             throw new Error(errorMessage);
         } finally {

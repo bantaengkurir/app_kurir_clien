@@ -197,13 +197,13 @@
 //     try {
 //       // Ambil order_id dari data earning
 //       const orderId = courierEarnings[0].order_id;
-  
+
 //       // Data yang akan dikirim ke backend untuk membuat transaksi Midtrans
 //       const transactionData = {
 //         totalEarnings: totalEarnings, // Akses langsung tanpa tanda kurung
 //         orderId: orderId,
 //       };
-  
+
 //       // Panggil action createMidtrans dari store
 //       await createMidtrans(transactionData);
 //     } catch (error) {
@@ -300,12 +300,19 @@
 
 // export default CourierEarning;
 
-
-
 import React, { useEffect, useMemo, useState } from "react";
-import { Container, Table, Button, Alert, Form, Row, Col } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Button,
+  Alert,
+  Form,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { format, parseISO } from "date-fns";
 import useOrderCourierStore from "../../store/useOrderCourierStore";
+import { isAfter} from "date-fns";
 import "./style.css";
 
 const CourierEarning = () => {
@@ -321,6 +328,35 @@ const CourierEarning = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState(null);
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+  useEffect(() => {
+    if (courierEarnings.length > 0 && courierEarnings[0].earning_date) {
+        // Ekstrak tanggal saja dari earning_date
+        const earningDateString = courierEarnings[0].earning_date.split("T")[0];
+
+        // Ambil tanggal saja dari currentDate
+        const currentDateString = new Date().toISOString().split("T")[0];
+
+        // Konversi ke Date object untuk perbandingan
+        const targetDate = new Date(earningDateString);
+        const currentDateOnly = new Date(currentDateString);
+
+        console.log("Tanggal Target:", targetDate);
+        console.log("Tanggal Saat Ini:", currentDateOnly);
+        console.log("Apakah tombol harus tampil?", currentDateOnly > targetDate);
+
+        setIsButtonVisible(currentDateOnly > targetDate);
+    } else {
+        console.error("Data courierEarnings atau earning_date tidak tersedia.");
+    }
+}, [courierEarnings]);
+
+// Fungsi untuk memvalidasi format tanggal
+const isValidDate = (dateString) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
+    return regex.test(dateString);
+};
 
   useEffect(() => {
     const today = format(new Date(), "yyyy-MM-dd");
@@ -339,7 +375,7 @@ const CourierEarning = () => {
         setIsLoading(false);
       }
     };
-    
+
     if (selectedDate) loadData();
   }, [selectedDate, fetchCourierEarning]);
 
@@ -348,11 +384,11 @@ const CourierEarning = () => {
       if (courierEarnings.length === 0) {
         throw new Error("Tidak ada data penghasilan untuk diajukan");
       }
-      
+
       await createMidtrans({
         totalEarnings: totalEarnings,
-        orderId: courierEarnings.map(earning => earning.order_id),
-        date: selectedDate
+        orderId: courierEarnings.map((earning) => earning.order_id),
+        date: selectedDate,
       });
     } catch (error) {
       setLocalError(error.message);
@@ -361,7 +397,9 @@ const CourierEarning = () => {
 
   return (
     <Container className="py-4">
-      <h2 className="mb-4 text-center text-primary fw-bold">Penghasilan Kurir</h2>
+      <h2 className="mb-4 text-center text-primary fw-bold">
+        Penghasilan Kurir
+      </h2>
 
       {/* Filter Tanggal */}
       <Row className="mb-4 justify-content-center">
@@ -381,27 +419,32 @@ const CourierEarning = () => {
 
       {/* Feedback Status */}
       {isLoading && <Alert variant="info">Memuat data...</Alert>}
-      {localError && <Alert variant="danger">{localError}</Alert>}
+      {/* {localError && <Alert variant="danger">{localError}</Alert>} */}
       {storeError && <Alert variant="danger">{storeError}</Alert>}
 
       {/* Tabel Data */}
       {courierEarnings.length > 0 ? (
         <>
           <Table striped bordered hover responsive className="shadow-lg">
-             <thead className="bg-primary text-white">
-               <tr>
-                 <th>#</th>
-                 <th>Tanggal</th>
-                 <th>Order ID</th>
-                 <th>Jumlah Pesanan</th>
-                 <th>Penghasilan</th>
-               </tr>
-             </thead>
-             <tbody>
-               {courierEarnings.map((earning, index) => (
+            <thead className="bg-primary text-white">
+              <tr>
+                <th>#</th>
+                <th>Tanggal</th>
+                <th>Order ID</th>
+                <th>Jumlah Pesanan</th>
+                <th>Penghasilan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courierEarnings.map((earning, index) => (
                 <tr key={earning.id} className="hover-effect">
                   <td>{index + 1}</td>
-                  <td>{format(parseISO(earning.earning_date), "dd MMMM yyyy HH:mm")}</td>
+                  <td>
+                    {format(
+                      parseISO(earning.earning_date),
+                      "dd MMMM yyyy HH:mm"
+                    )}
+                  </td>
                   <td>{earning.order_id}</td>
                   <td>Rp{earning.amount.toLocaleString()}</td>
                   <td className="text-success fw-bold">
@@ -423,7 +466,7 @@ const CourierEarning = () => {
                 </td>
               </tr>
               <tr>
-                <td colSpan={6} className="text-center">
+                {/* <td colSpan={6} className="text-center">
                   <Button
                     variant="primary"
                     size="lg"
@@ -433,6 +476,23 @@ const CourierEarning = () => {
                   >
                     {isPaymentLoading ? "Memproses..." : "Ajukan Pembayaran"}
                   </Button>
+                </td> */}
+                <td colSpan={6} className="text-center">
+                {isButtonVisible && (
+            <Button
+                variant="primary"
+                size="lg"
+                disabled={totalEarnings === 0 || isPaymentLoading}
+                onClick={handlePayment}
+                className="fw-bold shadow-sm"
+            >
+                {isPaymentLoading ? "Memproses..." : "Ajukan Pembayaran"}
+            </Button>
+        )}
+        {!isButtonVisible && (
+            <p>Tombol tidak tersedia karena belum melewati tanggal target.</p>
+        )}
+                  
                 </td>
               </tr>
             </tfoot>
