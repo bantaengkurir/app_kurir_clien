@@ -82,7 +82,7 @@ const App = () => {
 
 
   return (
-    <div data-theme={theme}>
+    <div >
       <Routers />
       <Toaster />     
       

@@ -160,7 +160,7 @@
 //     //     });
 //     // },
 //     // disconnectSocket: () => {
-//     //     if (get().socket?.connected) get().socket.disconnect();
+//     //     if (get().socket.connected) get().socket.disconnect();
 //     // },
 // }));
 
@@ -542,6 +542,7 @@ const useAuthStore = create(
 
             checkAuth: async() => {
                 try {
+
                     const res = await axios.get("http://localhost:8001/api/auth/check");
                     if (res.data) {
                         set({ authUser: res.data });
@@ -558,7 +559,7 @@ const useAuthStore = create(
             signup: async(data) => {
                 set({ isSigningUp: true });
                 try {
-                    const res = await axiosInstance.post("/auth/signup", data);
+                    const res = await axiosInstance.post("/auth/register", data);
                     set({ authUser: res.data });
                     document.cookie = `user_data=${encodeURIComponent(JSON.stringify(res.data))}; path=/; max-age=86400;`;
                     toast.success("Account created successfully");
@@ -570,32 +571,178 @@ const useAuthStore = create(
                 }
             },
 
+            // login: async(data) => {
+            //     set({ isLoggingIn: true });
+            //     try {
+            //         const res = await axiosInstance.post("/auth/loginweb", data);
+            //         console.log("ini login", res.data.data.data)
+            //         if (res.data.data.data) {
+            //             set({ authUser: res.data.data.data });
+            //             document.cookie = `user_data=${encodeURIComponent(JSON.stringify(res.data.data.data))}; path=/; max-age=86400;`;
+            //             get().connectSocket();
+            //         }
+            //         toast.success("Logged in successfully");
+            //         // window.location.reload();
+            //     } catch (error) {
+            //         toast.error(error.response.data.message || "Login failed");
+            //     } finally {
+            //         set({ isLoggingIn: false });
+            //     }
+            // },
+
+            // logout: async() => {
+            //     try {
+            //         await axiosInstance.post("/auth/logoutWeb");
+            //         set({ authUser: null });
+            //         document.cookie = "user_data=; path=/; max-age=0;";
+            //         toast.success("Logged out successfully");
+            //         window.location.reload();
+            //         get().disconnectSocket();
+
+            //     } catch (error) {
+            //         toast.error(error.response.data.message || "Logout failed");
+            //     }
+            // },
+
+            // store/useAuthStore.js
             login: async(data) => {
                 set({ isLoggingIn: true });
                 try {
-                    const res = await axiosInstance.post("/auth/login", data);
-                    if (res.data.data.data) {
-                        set({ authUser: res.data.data.data });
-                        document.cookie = `user_data=${encodeURIComponent(JSON.stringify(res.data.data.data))}; path=/; max-age=86400;`;
-                        get().connectSocket();
+                    const res = await axiosInstance.post("/auth/loginweb", data);
+
+                    if (!res.data.data.data) {
+                        throw new Error('Invalid response structure from server');
                     }
+
+                    const userData = {
+                        ...res.data.data.data,
+                        token: res.data.data.token // Pastikan backend mengembalikan token
+                    };
+
+                    set({ authUser: userData });
+                    document.cookie = `user_data=${encodeURIComponent(JSON.stringify(userData))}; path=/; max-age=86400;`;
+                    get().connectSocket();
                     toast.success("Logged in successfully");
+                    return userData;
                 } catch (error) {
-                    toast.error(error.response.data.message || "Login failed");
+                    console.error('Login error:', error);
+
+                    // Handle error dengan lebih baik
+                    let errorMessage = 'Login failed';
+                    if (error.response) {
+                        errorMessage = error.response.data.message || error.response.statusText;
+                    } else if (error.request) {
+                        errorMessage = 'No response from server';
+                    } else {
+                        errorMessage = error.message;
+                    }
+
+                    toast.error(errorMessage);
+                    throw error;
                 } finally {
                     set({ isLoggingIn: false });
                 }
             },
 
+            // logout: async() => {
+            //     try {
+            //         await axiosInstance.post("/auth/logoutWeb");
+            //         set({ authUser: null });
+            //         document.cookie = "user_data=; path=/; max-age=0;";
+            //         toast.success("Logged out successfully");
+            //         window.location.reload();
+            //         get().disconnectSocket();
+            //     } catch (error) {
+            //         toast.error(error.response.data.message || "Logout failed");
+            //     }
+            // },
+
+            // store/useAuthStore.js
+            // logout: async() => {
+            //     try {
+            //         await axiosInstance.post("/auth/logoutWeb");
+            //         // Membersihkan semua cookie dan local storage
+            //         document.cookie.split(';').forEach(cookie => {
+            //             const [name] = cookie.trim().split('=');
+            //             document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+            //         });
+            //         localStorage.clear();
+            //         // authUser(); // Removed as it is not defined
+            //         localStorage.removeItem('auth-storage');
+            //         set({ authUser: null });
+            //         toast.success("Logged out successfully");
+            //         window.location.reload();
+            //     } catch (error) {
+            //         toast.error(error.response.data.message || "Logout failed");
+            //     }
+            // },
+
             logout: async() => {
                 try {
-                    await axiosInstance.post("/auth/logout");
-                    set({ authUser: null });
-                    document.cookie = "user_data=; path=/; max-age=0;";
+                    await axiosInstance.post("/auth/logoutWeb");
+
+                    // Membersihkan semua cookie
+                    document.cookie.split(';').forEach(cookie => {
+                        const [name] = cookie.trim().split('=');
+                        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+                    });
+
+                    // Membersihkan localStorage
+                    localStorage.clear();
+
+                    // Reset state
+                    set({
+                        authUser: null,
+                        userId: null,
+                        socket: null,
+                        onlineUsers: []
+                    });
+
+                    // Membersihkan persistensi Zustand
+                    // Ini akan memicu rehydrasi state kosong
+                    await useAuthStore.persist.clearStorage();
+
                     toast.success("Logged out successfully");
-                    get().disconnectSocket();
+                    window.location.href = '/login'; // Redirect ke login page
                 } catch (error) {
                     toast.error(error.response.data.message || "Logout failed");
+                }
+            },
+
+
+            verify: async(data) => {
+                set({ isSigningUp: true });
+                try {
+                    const res = await axios.post("http://localhost:8001/api/auth/verify-email", data);
+                    return res.data;
+                    // set({ authUser: res.data });
+                    // localStorage.setItem("authUser", JSON.stringify(res.data)); // Simpan data user di local storage
+                } catch (error) {
+                    toast.error(error.response.data.message || "Verification failed");
+                } finally {
+                    set({ isSigningUp: false });
+                }
+            },
+            resendEmail: async(data) => {
+                set({ isSigningUp: true });
+                try {
+                    const res = await axios.post("http://localhost:8001/api/auth/resend-email", {
+                        email: data.email
+                    });
+
+                    if (res.data.success) {
+                        toast.success(res.data.message);
+                    } else {
+                        toast.error(res.data.message || "Failed to resend email");
+                    }
+
+                    return res.data;
+                } catch (error) {
+                    const errorMessage = error.response.data.message || "Verification failed";
+                    toast.error(errorMessage);
+                    throw new Error(errorMessage);
+                } finally {
+                    set({ isSigningUp: false });
                 }
             },
 

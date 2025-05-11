@@ -145,7 +145,9 @@
 
 //   if (isMessagesLoading) {
 //     return (
-//       <div className={`flex-1 flex flex-col overflow-auto`} data-theme={theme}>
+//       <div className={`flex-1 flex flex-col overflow-auto`} 
+// data-theme={theme}
+// >
 //         <ChatHeader />
 //         <MessageSkeleton />
 //         <MessageInput />
@@ -162,7 +164,9 @@
 // //   ?.split("=")[1]; // Ambil nilainya
 
 //   return (
-//     <div className={`flex-1 flex flex-col overflow-auto`} data-theme={theme}>
+//     <div className={`flex-1 flex flex-col overflow-auto`} 
+// data-theme={theme}
+// >
 //       <ChatHeader />
 
 //       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -261,7 +265,7 @@ const ChatContainer = () => {
   // } catch (error) {
   //   console.error("Error parsing theme from localStorage:", error);
   // }
-  const {theme, themeChat} = localStorage.getItem("chat-theme")
+  // const {theme, themeChat} = localStorage.getItem("chat-theme")
 
 
   // Handle klik di luar komponen
@@ -296,7 +300,9 @@ const ChatContainer = () => {
 
   if (isMessagesLoading) {
     return (
-      <div className={`flex-1 flex flex-col overflow-auto`} data-theme={theme}>
+      <div className={`flex-1 flex flex-col overflow-auto`} 
+      // data-theme={theme}
+      >
         <ChatHeader />
         <MessageSkeleton />
         <MessageInput />
@@ -308,7 +314,9 @@ const ChatContainer = () => {
     <div
       ref={chatContainerRef}
       className={`flex-1 flex flex-col overflow-auto`}
-      data-theme={theme}
+      
+      // data-theme={theme}
+
     >
       <ChatHeader />
 
@@ -343,7 +351,9 @@ const ChatContainer = () => {
             <div
               className={` ${
                 message.sender_id === authUser.id
-                  ? `chat-bubble flex flex-col bg-blue-500 ${themeChat}`
+                  ? `chat-bubble flex flex-col bg-blue-500` 
+                  // ${themeChat}
+                  
                   : "chat-bubble bg-neutral-500 bg-opacity-100 flex flex-col"
               }`}
             >

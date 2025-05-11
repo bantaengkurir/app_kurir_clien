@@ -46,7 +46,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
       {/* Tombol Chat */}
       <Link
-        to="/"
+        to="/home"
         style={{ textDecoration: "none" }}
         className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition-colors text-decoration-non"
       >

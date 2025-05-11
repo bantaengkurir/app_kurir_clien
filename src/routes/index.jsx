@@ -47,6 +47,7 @@ import { Loader } from "lucide-react";
 import CourierOrderDetail from '../containers/CourierOrderDetail';
 import CourierSallery from '../containers/Couriersallery';
 import CourierEarning from '../containers/CourierEarning';
+import OTPPage from '../pages/Otp';
 // import { Toaster } from "react-hot-toast";
 
 const Index = () => {
@@ -60,7 +61,7 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ authUser });
+  console.log("ini auth user", authUser );
 
   if (isCheckingAuth && !authUser)
     return (
@@ -71,13 +72,15 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
 
   const router = createBrowserRouter([
     {
-      path: '/home',
+      path: '/',
       element: 
+      // authUser ? 
           <HomePage />
+          // : <Navigate to="/login" />
       
     },
     {
-      path: "/",
+      path: "/home",
       element: 
       authUser ? 
       <HomePage1 /> 
@@ -87,11 +90,15 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
       path:"/signup",
        element:!authUser ? <SignUpPage /> : <Navigate to="/" />
     },
+    {
+      path:"/otp",
+       element: <OTPPage />
+    },
        { path:"/login",
          element:
-          !authUser ? 
+          // !authUser ? 
           <LoginPage /> 
-          : <Navigate to="/" />
+          // : <Navigate to="/" />
           },
        { path:"/settings", element:<SettingsPage />},
         {

@@ -424,7 +424,7 @@ const Index = () => {
   const handleAddressSearch = async () => {
     if (!inputAddress.trim()) return;
 
-    const key = "AIzaSyAW2HQ40GRaxDA9rDAQq0FarEWUszQhxAA";
+    const key = "AIzaSyAHrXsRceoW9TLDOuasfOds5-F7CF1tlqs";
     try {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(inputAddress)}&key=${key}`
@@ -450,7 +450,7 @@ const Index = () => {
 
   // Fungsi untuk mengambil alamat dari koordinat
   const fetchAddress = async (lat, lng) => {
-    const key = "AIzaSyAW2HQ40GRaxDA9rDAQq0FarEWUszQhxAA";
+    const key = "AIzaSyAHrXsRceoW9TLDOuasfOds5-F7CF1tlqs";
     try {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${key}`
@@ -556,10 +556,10 @@ const Index = () => {
 
       // Jika pesanan berhasil dibuat, tampilkan notifikasi sukses
       // toast.success("Pesanan berhasil dibuat!");
-      window.location.reload();
+      // window.location.reload();
   
       // Buka koneksi WebSocket setelah order berhasil dibuat
-      const newSocket = io("http://localhost:5173", {
+      const newSocket = io("http://localhost:5174", {
           query: {
               userId: order.user_id, // ID customer
               role: "customer",
@@ -704,7 +704,7 @@ const Index = () => {
                     <div className="mb-3">
                       <label className="form-label">Pilih Lokasi di Peta:</label>
                       <div style={{ border: "2px solid #0d6efd", borderRadius: "8px" }}>
-                        <LoadScript googleMapsApiKey="AIzaSyAW2HQ40GRaxDA9rDAQq0FarEWUszQhxAA">
+                        <LoadScript googleMapsApiKey="AIzaSyAHrXsRceoW9TLDOuasfOds5-F7CF1tlqs">
                           <GoogleMap
                             mapContainerStyle={{ height: "400px", width: "100%" }}
                             center={selectedLocation || { lat: -6.2088, lng: 106.8456 }}

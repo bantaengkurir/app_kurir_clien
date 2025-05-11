@@ -37,8 +37,10 @@
         "react-owl-carousel": "^2.3.3",
         "react-router-dom": "^6.28.0",
         "react-simple-star-rating": "^5.1.7",
+        "react-swiper": "^0.1.5",
         "react-toastify": "^11.0.3",
         "socket.io-client": "^4.8.1",
+        "swiper": "^11.2.6",
         "zustand": "^5.0.1"
     },
     "devDependencies": {

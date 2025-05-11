@@ -46,6 +46,8 @@ const MessageInput = () => {
       console.error("Failed to send message:", error);
     }
   };
+  console.log('text', text)
+  console.log('image', imagePreview)
 
   return (
     <div className="p-4 w-full">

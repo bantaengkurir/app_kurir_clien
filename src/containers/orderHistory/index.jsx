@@ -1,12 +1,12 @@
-// import { 
-// 	Card, 
-// 	Row, 
-// 	Col, 
-// 	Spinner, 
-// 	Badge, 
-// 	Button, 
-// 	Tabs, 
-// 	Tab 
+// import {
+// 	Card,
+// 	Row,
+// 	Col,
+// 	Spinner,
+// 	Badge,
+// 	Button,
+// 	Tabs,
+// 	Tab
 //   } from "react-bootstrap";
 //   import Navbar from "../../components/Navbar";
 //   import useProductStore from "../../store/useProductStore";
@@ -27,7 +27,7 @@
 
 // import 'leaflet-rotatedmarker';
 // import "../../assets/Leaflet.MovingMarker/MovingMarker";
-  
+
 //   // Fix leaflet marker icons
 //   delete L.Icon.Default.prototype._getIconUrl;
 //   L.Icon.Default.mergeOptions({
@@ -35,7 +35,7 @@
 // 	iconUrl: markericon,
 // 	shadowUrl: markericonshadow,
 //   });
-  
+
 //   const StatusTabs = ({ activeTab, setActiveTab }) => {
 // 	return (
 // 	  <Tabs
@@ -51,7 +51,7 @@
 // 	  </Tabs>
 // 	);
 //   };
-  
+
 // import WebSocketService from "../../utils/Websocet";
 // import courierIcon from "../../assets/image/courier.png"; // Siapkan ikon motor
 // import customerIcon from "../../assets/image/customer.png"; // Siapkan ikon motor
@@ -94,18 +94,18 @@
 // const AnimatedCourierMarker = ({ position, map, order }) => {
 // 	const markerRef = useRef(null);
 // 	const prevPositionRef = useRef(null);
-  
+
 // 	// Fungsi untuk menghitung arah
 // 	const calculateBearing = (start, end) => {
 // 	  const startLat = start.lat;
 // 	  const startLng = start.lng;
 // 	  const endLat = end.lat;
 // 	  const endLng = end.lng;
-  
+
 // 	  const dLng = (endLng - startLng) * Math.PI / 180;
 // 	  const lat1 = startLat * Math.PI / 180;
 // 	  const lat2 = endLat * Math.PI / 180;
-  
+
 // 	  const y = Math.sin(dLng) * Math.cos(lat2);
 // 	  const x = Math.cos(lat1) * Math.sin(lat2) -
 // 				Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
@@ -114,7 +114,7 @@
 // 	  bearing = (bearing + 360) % 360;
 // 	  return bearing;
 // 	};
-  
+
 // 	useEffect(() => {
 // 	  if (map && position) {
 // 		if (!markerRef.current) {
@@ -127,7 +127,7 @@
 // 			  rotationAngle: 0
 // 			}
 // 		  ).addTo(map);
-		  
+
 // 		  // Tambahkan popup
 // 		  markerRef.current.bindPopup(
 // 			`<strong>Kurir</strong><br>${order.courier?.name}`
@@ -135,7 +135,7 @@
 // 		} else {
 // 		  const newPos = L.latLng(position);
 // 		  const oldPos = prevPositionRef.current;
-		  
+
 // 		  if (oldPos && !newPos.equals(oldPos)) {
 // 			// Hitung arah dan animasi
 // 			const bearing = calculateBearing(oldPos, newPos);
@@ -145,7 +145,7 @@
 // 		  prevPositionRef.current = newPos;
 // 		}
 // 	  }
-  
+
 // 	  return () => {
 // 		if (markerRef.current) {
 // 		  markerRef.current.stop();
@@ -153,10 +153,10 @@
 // 		}
 // 	  };
 // 	}, [position, map, order]);
-  
+
 // 	return null;
 //   };
-  
+
 //   const OrderMap = ({ order }) => {
 // 	const [routes, setRoutes] = useState([]);
 // 	const [map, setMap] = useState(null);
@@ -170,7 +170,7 @@
 // 	const isValidCoordinate = (lat, lng) => {
 // 	  return !isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
 // 	};
-  
+
 // // 	// Setup WebSocket
 // 	useEffect(() => {
 
@@ -180,19 +180,18 @@
 // 		  setCourierPosition([data.latitude, data.longitude]);
 // 		}
 // 	  };
-  
 
 // 		if (order?.order_id) {
 // 			WebSocketService.connect(order.order_id);
 // 			WebSocketService.addCallback('location_update', handleLocationUpdate);
 // 		  }
-		
+
 // 		  return () => {
 // 			WebSocketService.removeCallback('location_update', handleLocationUpdate);
 // 			// Jangan panggil disconnect() di sini agar tidak memutus koneksi global
 // 		  };
 // 	}, [order?.order_id]); // Hanya jalankan ulang jika order_id berubah
-  
+
 // 	  // Setup WebSocket
 // 	  useEffect(() => {
 // 		let animationFrameId;
@@ -207,28 +206,25 @@
 // 		  });
 // 		  animationFrameId = requestAnimationFrame(() => smoothTransition(newPos));
 // 		};
-	
+
 // 		const handleLocationUpdate = (data) => {
 // 		  if (isValidCoordinate(data.latitude, data.longitude)) {
 // 			cancelAnimationFrame(animationFrameId);
 // 			smoothTransition([data.latitude, data.longitude]);
 // 		  }
 // 		};
-	
+
 // 		if (order?.order_id) {
 // 		  WebSocketService.connect(order.order_id);
 // 		  WebSocketService.addCallback('location_update', handleLocationUpdate);
 // 		}
-	
+
 // 		return () => {
 // 		  WebSocketService.removeCallback('location_update', handleLocationUpdate);
 // 		  cancelAnimationFrame(animationFrameId);
 // 		};
 // 	  }, [order?.order_id]);
-	
-	  
-	
-  
+
 // 	// Inisialisasi posisi awal
 // 	useEffect(() => {
 // 	  if (order) {
@@ -239,14 +235,13 @@
 // 		  setCustomerPosition([custLat, custLng]);
 // 		}
 
-
 // 		// Courier position
 // 		const courLat = parseFloat(order.courier?.latitude);
 // 		const courLng = parseFloat(order.courier?.longitude);
 // 		if (isValidCoordinate(courLat, courLng)) {
 // 		  setCourierPosition([courLat, courLng]);
 // 		}
-  
+
 // 		// Seller positions
 // 		const validSellers = order.items.reduce((acc, item) => {
 // 		  const lat = parseFloat(item.seller_latitude);
@@ -263,15 +258,15 @@
 // 		setSellers(validSellers);
 // 	  }
 // 	}, [order]);
-  
+
 // 	// // Update rute saat posisi berubah
 // 	// useEffect(() => {
 // 	//   if (map && courierPosition && customerPosition) {
 // 	// 	// Hapus rute sebelumnya
 // 	// 	routingControls.forEach(control => map.removeControl(control));
-		
+
 // 	// 	const newRoutingControls = [];
-  
+
 // 	// 	// Rute dari kurir ke customer
 // 	// 	const toCustomer = L.Routing.control({
 // 	// 	  waypoints: [
@@ -285,7 +280,7 @@
 // 	// 	  addWaypoints: false
 // 	// 	}).addTo(map);
 // 	// 	newRoutingControls.push(toCustomer);
-  
+
 // 	// 	// Rute dari seller ke kurir
 // 	// 	sellers.forEach(seller => {
 // 	// 	  const route = L.Routing.control({
@@ -301,7 +296,7 @@
 // 	// 	  }).addTo(map);
 // 	// 	  newRoutingControls.push(route);
 // 	// 	});
-  
+
 // 	// 	setRoutingControls(newRoutingControls);
 // 	//   }
 // 	// }, [courierPosition, customerPosition, map]);
@@ -310,9 +305,9 @@
 // 	if (map && courierPosition && customerPosition) {
 // 	  // Hapus rute sebelumnya
 // 	  routingControls.forEach(control => map.removeControl(control));
-	  
+
 // 	  const newRoutingControls = [];
-  
+
 // 	  // Warna hijau untuk semua rute
 // 	  const greenRouteStyle = {
 // 		color: '#4CAF50', // Warna hijau lebih modern
@@ -320,7 +315,7 @@
 // 		weight: 20,
 // 		dashArray: '10, 10' // Tambahkan garis putus untuk membedakan arah
 // 	  };
-  
+
 // 	  // Rute dari kurir ke customer
 // 	  const toCustomer = L.Routing.control({
 // 		waypoints: [
@@ -352,25 +347,24 @@
 // 	// 	}).addTo(map);
 // 	// 	newRoutingControls.push(route);
 // 	//   });
-	  
-  
+
 // 	  setRoutingControls(newRoutingControls);
 // 	}
 //   }, [courierPosition, customerPosition, map]);
 
 //   const LeafletRoutingMachine = ({ position, destination, color }) => {
 // 	const map = useMap();
-  
+
 // 	useEffect(() => {
 // 	  if (!position || !destination) return;
-  
+
 // 	  const routingControl = L.Routing.control({
 // 		waypoints: [
 // 		  L.latLng(position[0], position[1]),
 // 		  L.latLng(destination[0], destination[1])
 // 		],
 // 		lineOptions: {
-// 		  styles: [{ 
+// 		  styles: [{
 // 			color: color,
 // 			opacity: 0.8,
 // 			weight: 5,
@@ -381,10 +375,10 @@
 // 		addWaypoints: false,
 // 		createMarker: () => null
 // 	  }).addTo(map);
-  
+
 // 	  return () => map.removeControl(routingControl);
 // 	}, [map, position, destination, color]);
-  
+
 // 	return null;
 //   };
 
@@ -441,7 +435,6 @@
 // //     </Card>
 // //   );
 
-
 // 	return (
 // 	  <Card className="mb-4 map-card">
 // 		<Card.Header className="bg-primary text-white">
@@ -456,16 +449,16 @@
 // 			whenCreated={setMap}
 // 		  >
 
-// <LeafletRoutingMachine 
-//     position={courierPosition} 
-//     destination={customerPosition} 
+// <LeafletRoutingMachine
+//     position={courierPosition}
+//     destination={customerPosition}
 //     color="#4CAF50"
 //   />
 // 			<TileLayer
 // 			  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 // 			  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 // 			/>
-  
+
 // 			{/* Marker Customer */}
 // 			{customerPosition && (
 // 			  <Marker position={customerPosition}
@@ -489,13 +482,13 @@
 //  			{courierPosition && (
 // 				<>
 // 					<AnimatedCourierMarker position={courierPosition} map={map} order={order} icon={courierIcon}
-				
+
 // 					/>
-// 			  <Marker 
+// 			  <Marker
 // 				position={courierPosition}
 // 				icon={CourierIcon}
 // 			  >
-			
+
 // 				<Popup>
 // 				  <div>
 // 					<strong>Kurir</strong>
@@ -508,10 +501,10 @@
 // 			  </Marker>
 // 			  </>
 // 			)}
-  
+
 // 			{/* Marker Penjual */}
 // 			{sellers.map((seller, idx) => (
-// 			  <Marker key={idx} position={seller.position}			  
+// 			  <Marker key={idx} position={seller.position}
 // 				icon={ShopIcon}
 // 			  >
 // 				<Popup>
@@ -528,21 +521,18 @@
 // 	  </Card>
 // 	);
 //   };
-  
-
 
 //   const safeFormatDate = (date, dateFormat, locale) => {
 // 	if (!date || !isValid(new Date(date))) return 'Tanggal tidak valid';
 // 	return format(new Date(date), dateFormat, { locale });
 //   };
-  
 
 //   const Index = () => {
 // 	const [activeTab, setActiveTab] = useState('pending');
 // 	const [selectedOrder, setSelectedOrder] = useState(null);
 // 	const { fetchOrder, orders = [], fetchPayment, fetchHistoriesById } = useProductStore();
-// 	const currentUser = useProductStore((state) => state.currentUser); // Asumsikan currentUser 
-  
+// 	const currentUser = useProductStore((state) => state.currentUser); // Asumsikan currentUser
+
 // 	useEffect(() => {
 // 		  const loadData = async () => {
 //             try {
@@ -572,12 +562,11 @@
 
 //     // Tentukan apakah pengguna adalah kurir atau customer
 //     const isCourier = currentUser?.role === "courier";
-  
-// 	const filteredOrders = orders.filter(order => 
+
+// 	const filteredOrders = orders.filter(order =>
 // 	  order.payment_status?.toLowerCase() === activeTab.toLowerCase()
 // 	);
 
-  
 // 	const groupItemsBySeller = (items) => {
 // 	  return items.reduce((acc, item) => {
 // 		const sellerId = item.seller_id;
@@ -596,32 +585,32 @@
 // 		return acc;
 // 	  }, {});
 // 	};
-  
+
 // 	const getOrderSummary = (order) => {
 // 		const items = order.items || [];
-		
+
 // 		// Pastikan item.price dan item.quantity adalah angka
 // 		const subtotal = items.reduce((sum, item) => {
 // 		  const price = parseFloat(item.price);
 // 		  const quantity = parseFloat(item.quantity);
 // 		  return sum + (price * quantity);
 // 		}, 0);
-	  
+
 // 		// Pastikan shipping_cost adalah angka
 // 		const shipping = parseFloat(order.shipping_cost[0]?.shipping_cost) || 0;
-	  
+
 // 		// Kembalikan hasil sebagai angka
 // 		return { subtotal, shipping, total: subtotal + shipping };
 // 	  };
-  
+
 // 	return (
 // 	  <>
 // 		<Navbar />
 // 		<div className="container-fluid py-4 orders-container">
 // 		  <h2 className="text-center mb-4 fw-bold text-primary">Riwayat Pesanan</h2>
-		  
+
 // 		  <StatusTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-  
+
 // 		  {selectedOrder && ['process', 'completed'].includes(activeTab) && (
 //   <Row className="mb-4">
 //   <Col md={6}>
@@ -632,18 +621,18 @@
 // 	//   latCustomer={selectedOrder.shipping_cost[0]?.latitude}
 // 	//   lnCustomer={selectedOrder.shipping_cost[0]?.longitude}
 // 	// />
-// 	<CourierTracking 
-// 		orderId={selectedOrder.order_id} 
-// 		courierId={selectedOrder.courier?.id}		
+// 	<CourierTracking
+// 		orderId={selectedOrder.order_id}
+// 		courierId={selectedOrder.courier?.id}
 // 		latCourier={selectedOrder.courier?.latitude}
 // 		lnCourier={selectedOrder.courier?.longitude}
 // 		destination={[selectedOrder.courier?.latitude, selectedOrder.courier?.longitude]} // Koordinat tujuan (customer)
 // 	  />
 // 	) : (
-	  
-// 	//   <CourierTracking 
-// 	// 	orderId={selectedOrder.order_id} 
-// 	// 	courierId={selectedOrder.courier?.id}		
+
+// 	//   <CourierTracking
+// 	// 	orderId={selectedOrder.order_id}
+// 	// 	courierId={selectedOrder.courier?.id}
 // 	// 	latCourier={selectedOrder.courier?.latitude}
 // 	// 	lnCourier={selectedOrder.courier?.longitude}
 // 	// 	destination={[selectedOrder.courier?.latitude, selectedOrder.courier?.longitude]} // Koordinat tujuan (customer)
@@ -663,7 +652,7 @@
 //   </Col>
 // </Row>
 // )}
-  
+
 // 		  {!orders.length ? (
 // 			<div className="text-center mt-5">
 // 			  <Spinner animation="border" variant="primary" />
@@ -673,7 +662,7 @@
 // 			filteredOrders.map(order => {
 // 			  const summary = getOrderSummary(order);
 // 			  const groupedSellers = groupItemsBySeller(order.items);
-  
+
 // 			  return (
 // 				<Card key={order.order_id} className="mb-4 shadow">
 // 				  <Card.Header className="bg-primary text-white">
@@ -694,7 +683,7 @@
 // 					  </Col>
 // 					</Row>
 // 				  </Card.Header>
-  
+
 // 				  <Card.Body>
 // 					<Row>
 // 					  <Col md={8}>
@@ -738,7 +727,7 @@
 // 						  </Card>
 // 						))}
 // 					  </Col>
-  
+
 // 					  {/* Bagian kanan (info kurir dan ringkasan) */}
 // 					  <Col md={4}>
 // 						{/* ... (sama seperti sebelumnya) */}
@@ -760,7 +749,7 @@
 // 					  </div>
 // 					</Card.Body>
 // 				  </Card>
-	  
+
 // 				  <Card>
 // 					<Card.Header className="bg-light">
 // 					  <h5 className="mb-0">Ringkasan Pembayaran</h5>
@@ -785,13 +774,13 @@
 // 					  </Col>
 // 					</Row>
 // 				  </Card.Body>
-				  
+
 //  			<Card.Footer className="bg-light">
-//  			  <Button 
-// 				variant="primary" 
+//  			  <Button
+// 				variant="primary"
 // 				onClick={() => setSelectedOrder(selectedOrder?.order_id === order.order_id ? null : order)}
 // 			  >
-// 				{selectedOrder?.order_id === order.order_id ? 
+// 				{selectedOrder?.order_id === order.order_id ?
 // 				  'Sembunyikan Detail' : 'Lihat Detail Pengiriman'}
 // 			  </Button>
 // 			</Card.Footer>
@@ -807,38 +796,36 @@
 // 	  </>
 // 	);
 //   };
-  
+
 //   export default Index;
 
-
-
-import { 
-  Card, 
-  Row, 
-  Col, 
-  Spinner, 
-  Badge, 
-  Button, 
-  Tabs, 
-  Tab, 
-  CardFooter
+import {
+  Card,
+  Row,
+  Col,
+  Spinner,
+  Badge,
+  Button,
+  Tabs,
+  Tab,
+  CardFooter,
 } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import useProductStore from "../../store/useProductStore";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { format, isValid } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { format, isValid } from "date-fns";
+import { id } from "date-fns/locale";
 import toast from "react-hot-toast";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import markericon2x from "../../../node_modules/leaflet/dist/images/marker-icon-2x.png";
 import markericon from "../../../node_modules/leaflet/dist/images/marker-icon.png";
 import markericonshadow from "../../../node_modules/leaflet/dist/images/marker-shadow.png";
-import { RoutingMachine } from './RoutingMachine'; // Buat komponen ini
+import { RoutingMachine } from "./RoutingMachine"; // Buat komponen ini
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import 'leaflet-rotatedmarker';
+import "leaflet-rotatedmarker";
 import "../../assets/Leaflet.MovingMarker/MovingMarker";
 
 // Fix leaflet marker icons
@@ -871,8 +858,8 @@ import customerIcon from "../../assets/image/customer.png"; // Siapkan ikon moto
 import shopIcon from "../../assets/image/shop.png"; // Siapkan ikon motor
 import OrderTracking from "../Tracking/OrderTracking";
 import CourierTracking from "../Tracking/CourierTracking";
-import 'leaflet-routing-machine';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import "leaflet-routing-machine";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import OrderHistories from "./OrderHistory";
 import { ConfirmationModal } from "./KonfirmationModal";
 
@@ -882,21 +869,21 @@ const CourierIcon = L.icon({
   iconSize: [82, 82],
   iconAnchor: [45, 62],
   popupAnchor: [0, -32],
-  rotationOrigin: 'center center'
+  rotationOrigin: "center center",
 });
 
 const CustomerIcon = L.icon({
   iconUrl: customerIcon,
   iconSize: [82, 82],
   iconAnchor: [45, 62],
-  popupAnchor: [0, -32]
+  popupAnchor: [0, -32],
 });
 
 const ShopIcon = L.icon({
   iconUrl: shopIcon,
   iconSize: [42, 42],
   iconAnchor: [22, 42],
-  popupAnchor: [0, -32]
+  popupAnchor: [0, -32],
 });
 
 // Komponen Marker Kurir dengan Animasi
@@ -911,15 +898,16 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
     const endLat = end.lat;
     const endLng = end.lng;
 
-    const dLng = (endLng - startLng) * Math.PI / 180;
-    const lat1 = startLat * Math.PI / 180;
-    const lat2 = endLat * Math.PI / 180;
+    const dLng = ((endLng - startLng) * Math.PI) / 180;
+    const lat1 = (startLat * Math.PI) / 180;
+    const lat2 = (endLat * Math.PI) / 180;
 
     const y = Math.sin(dLng) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) -
-              Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+    const x =
+      Math.cos(lat1) * Math.sin(lat2) -
+      Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
     let bearing = Math.atan2(y, x);
-    bearing = bearing * 180 / Math.PI;
+    bearing = (bearing * 180) / Math.PI;
     bearing = (bearing + 360) % 360;
     return bearing;
   };
@@ -933,10 +921,10 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
           {
             icon: CourierIcon,
             autostart: true,
-            rotationAngle: 0
+            rotationAngle: 0,
           }
         ).addTo(map);
-        
+
         // Tambahkan popup
         markerRef.current.bindPopup(
           `<strong>Kurir</strong><br>${order.courier?.name}`
@@ -944,7 +932,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
       } else {
         const newPos = L.latLng(position);
         const oldPos = prevPositionRef.current;
-        
+
         if (oldPos && !newPos.equals(oldPos)) {
           // Hitung arah dan animasi
           const bearing = calculateBearing(oldPos, newPos);
@@ -1053,7 +1041,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 //     if (map && courierPosition && customerPosition) {
 //       // Hapus rute sebelumnya
 //       routingControls.forEach(control => map.removeControl(control));
-      
+
 //       const newRoutingControls = [];
 
 //       // Warna hijau untuk semua rute
@@ -1095,7 +1083,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 //           L.latLng(destination[0], destination[1])
 //         ],
 //         lineOptions: {
-//           styles: [{ 
+//           styles: [{
 //             color: color,
 //             opacity: 0.8,
 //             weight: 5,
@@ -1126,9 +1114,9 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 //           style={{ height: "100%", width: "100%" }}
 //           whenCreated={setMap}
 //         >
-//           <LeafletRoutingMachine 
-//             position={courierPosition} 
-//             destination={customerPosition} 
+//           <LeafletRoutingMachine
+//             position={courierPosition}
+//             destination={customerPosition}
 //             color="#4CAF50"
 //           />
 //           <TileLayer
@@ -1156,7 +1144,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 //             <>
 //               <AnimatedCourierMarker position={courierPosition} map={map} order={order} icon={courierIcon}
 //             />
-//               <Marker 
+//               <Marker
 //                 position={courierPosition}
 //                 icon={CourierIcon}
 //               >
@@ -1175,7 +1163,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 
 //           {/* Marker Penjual */}
 //           {sellers.map((seller, idx) => (
-//             <Marker key={idx} position={seller.position}			  
+//             <Marker key={idx} position={seller.position}
 //               icon={ShopIcon}
 //             >
 //               <Popup>
@@ -1201,14 +1189,14 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 	const [sellers, setSellers] = useState([]);
 // 	const [routingControls, setRoutingControls] = useState([]);
 // 	const [refreshKey, setRefreshKey] = useState(0); // State untuk memaksa refresh peta
-  
+
 // 	console.log("ini seller", sellers);
-  
+
 // 	// Fungsi validasi koordinat
 // 	const isValidCoordinate = (lat, lng) => {
 // 	  return !isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
 // 	};
-  
+
 // 	// Setup WebSocket
 // 	useEffect(() => {
 // 	  let animationFrameId;
@@ -1223,25 +1211,25 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		});
 // 		animationFrameId = requestAnimationFrame(() => smoothTransition(newPos));
 // 	  };
-  
+
 // 	  const handleLocationUpdate = (data) => {
 // 		if (isValidCoordinate(data.latitude, data.longitude)) {
 // 		  cancelAnimationFrame(animationFrameId);
 // 		  smoothTransition([data.latitude, data.longitude]);
 // 		}
 // 	  };
-  
+
 // 	  if (order?.order_id) {
 // 		WebSocketService.connect(order.order_id);
 // 		WebSocketService.addCallback('location_update', handleLocationUpdate);
 // 	  }
-  
+
 // 	  return () => {
 // 		WebSocketService.removeCallback('location_update', handleLocationUpdate);
 // 		cancelAnimationFrame(animationFrameId);
 // 	  };
 // 	}, [order?.order_id]);
-  
+
 // 	// Inisialisasi posisi awal
 // 	useEffect(() => {
 // 	  if (order) {
@@ -1251,14 +1239,14 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		if (isValidCoordinate(custLat, custLng)) {
 // 		  setCustomerPosition([custLat, custLng]);
 // 		}
-  
+
 // 		// Courier position
 // 		const courLat = parseFloat(order.courier?.latitude);
 // 		const courLng = parseFloat(order.courier?.longitude);
 // 		if (isValidCoordinate(courLat, courLng)) {
 // 		  setCourierPosition([courLat, courLng]);
 // 		}
-  
+
 // 		// Seller positions
 // 		const validSellers = order.items.reduce((acc, item) => {
 // 		  const lat = parseFloat(item.seller_latitude);
@@ -1275,15 +1263,15 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		setSellers(validSellers);
 // 	  }
 // 	}, [order]);
-  
+
 // 	// Update rute saat posisi berubah
 // 	useEffect(() => {
 // 	  if (map && courierPosition && customerPosition) {
 // 		// Hapus rute sebelumnya
 // 		routingControls.forEach(control => map.removeControl(control));
-		
+
 // 		const newRoutingControls = [];
-  
+
 // 		// Warna hijau untuk semua rute
 // 		const greenRouteStyle = {
 // 		  color: '#4CAF50', // Warna hijau lebih modern
@@ -1291,7 +1279,7 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		  weight: 20,
 // 		  dashArray: '10, 10' // Tambahkan garis putus untuk membedakan arah
 // 		};
-  
+
 // 		// Rute dari kurir ke customer
 // 		const toCustomer = L.Routing.control({
 // 		  waypoints: [
@@ -1306,33 +1294,33 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		  createMarker: () => null // Hilangkan marker default
 // 		}).addTo(map);
 // 		newRoutingControls.push(toCustomer);
-  
+
 // 		setRoutingControls(newRoutingControls);
 // 	  }
 // 	}, [courierPosition, customerPosition, map]);
-  
+
 // 	// Refresh peta setiap 15 detik
 // 	useEffect(() => {
 // 	  const interval = setInterval(() => {
 // 		setRefreshKey(prevKey => prevKey + 1); // Perbarui refreshKey setiap 15 detik
 // 	  }, 15000);
-  
+
 // 	  return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount
 // 	}, []);
-  
+
 // 	const LeafletRoutingMachine = ({ position, destination, color }) => {
 // 	  const map = useMap();
-  
+
 // 	  useEffect(() => {
 // 		if (!position || !destination) return;
-  
+
 // 		const routingControl = L.Routing.control({
 // 		  waypoints: [
 // 			L.latLng(position[0], position[1]),
 // 			L.latLng(destination[0], destination[1])
 // 		  ],
 // 		  lineOptions: {
-// 			styles: [{ 
+// 			styles: [{
 // 			  color: color,
 // 			  opacity: 0.8,
 // 			  weight: 5,
@@ -1343,13 +1331,13 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 		  addWaypoints: false,
 // 		  createMarker: () => null
 // 		}).addTo(map);
-  
+
 // 		return () => map.removeControl(routingControl);
 // 	  }, [map, position, destination, color]);
-  
+
 // 	  return null;
 // 	};
-  
+
 // 	return (
 // 	  <Card className="mb-4 map-card">
 // 		<Card.Header className="bg-primary text-white">
@@ -1364,16 +1352,16 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 			style={{ height: "100%", width: "100%" }}
 // 			whenCreated={setMap}
 // 		  >
-// 			<LeafletRoutingMachine 
-// 			  position={courierPosition} 
-// 			  destination={customerPosition} 
+// 			<LeafletRoutingMachine
+// 			  position={courierPosition}
+// 			  destination={customerPosition}
 // 			  color="#4CAF50"
 // 			/>
 // 			<TileLayer
 // 			  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 // 			  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 // 			/>
-  
+
 // 			{/* Marker Customer */}
 // 			{customerPosition && (
 // 			  <Marker position={customerPosition}
@@ -1388,13 +1376,13 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 				</Popup>
 // 			  </Marker>
 // 			)}
-  
+
 // 			{/* Marker Kurir dengan Animasi */}
 // 			{courierPosition && (
 // 			  <>
 // 				<AnimatedCourierMarker position={courierPosition} map={map} order={order} icon={courierIcon}
 // 			  />
-// 				<Marker 
+// 				<Marker
 // 				  position={courierPosition}
 // 				  icon={CourierIcon}
 // 				>
@@ -1410,10 +1398,10 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 				</Marker>
 // 			  </>
 // 			)}
-  
+
 // 			{/* Marker Penjual */}
 // 			{sellers.map((seller, idx) => (
-// 			  <Marker key={idx} position={seller.position}			  
+// 			  <Marker key={idx} position={seller.position}
 // 				icon={ShopIcon}
 // 			  >
 // 				<Popup>
@@ -1431,9 +1419,9 @@ const AnimatedCourierMarker = ({ position, map, order }) => {
 // 	);
 //   };
 
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import { CancelModal } from "./CancelModal ";
 import { useNavigate } from "react-router-dom";
 
@@ -1449,19 +1437,21 @@ const OrderMap = ({ order }) => {
 
   // Fungsi validasi koordinat
   const isValidCoordinate = (lat, lng) => {
-    return !isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
+    return (
+      !isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
+    );
   };
 
   // Setup WebSocket
   useEffect(() => {
     let animationFrameId;
     const smoothTransition = (newPos) => {
-      setCourierPosition(prev => {
+      setCourierPosition((prev) => {
         if (!prev) return newPos;
         const step = 0.1; // Kehalusan animasi
         return [
           prev[0] + (newPos[0] - prev[0]) * step,
-          prev[1] + (newPos[1] - prev[1]) * step
+          prev[1] + (newPos[1] - prev[1]) * step,
         ];
       });
       animationFrameId = requestAnimationFrame(() => smoothTransition(newPos));
@@ -1474,13 +1464,13 @@ const OrderMap = ({ order }) => {
       }
     };
 
-    if (order?.order_id && order.status !== 'completed') {
+    if (order?.order_id && order.status !== "completed") {
       WebSocketService.connect(order.order_id);
-      WebSocketService.addCallback('location_update', handleLocationUpdate);
+      WebSocketService.addCallback("location_update", handleLocationUpdate);
     }
 
     return () => {
-      WebSocketService.removeCallback('location_update', handleLocationUpdate);
+      WebSocketService.removeCallback("location_update", handleLocationUpdate);
       cancelAnimationFrame(animationFrameId);
     };
   }, [order?.order_id, order?.status]);
@@ -1496,7 +1486,7 @@ const OrderMap = ({ order }) => {
       }
 
       // Courier position (hanya jika status bukan 'completed')
-      if (order.status !== 'completed') {
+      if (order.status !== "completed") {
         const courLat = parseFloat(order.courier?.latitude);
         const courLng = parseFloat(order.courier?.longitude);
         if (isValidCoordinate(courLat, courLng)) {
@@ -1512,7 +1502,7 @@ const OrderMap = ({ order }) => {
           acc.push({
             position: [lat, lng],
             name: item.seller_name,
-            address: item.seller_address
+            address: item.seller_address,
           });
         }
         return acc;
@@ -1523,32 +1513,37 @@ const OrderMap = ({ order }) => {
 
   // Update rute saat posisi berubah (hanya jika status bukan 'completed')
   useEffect(() => {
-    if (map && courierPosition && customerPosition && order.status !== 'completed') {
+    if (
+      map &&
+      courierPosition &&
+      customerPosition &&
+      order.status !== "completed"
+    ) {
       // Hapus rute sebelumnya
-      routingControls.forEach(control => map.removeControl(control));
-      
+      routingControls.forEach((control) => map.removeControl(control));
+
       const newRoutingControls = [];
 
       // Warna hijau untuk semua rute
       const greenRouteStyle = {
-        color: '#4CAF50', // Warna hijau lebih modern
+        color: "#4CAF50", // Warna hijau lebih modern
         opacity: 0.8,
         weight: 20,
-        dashArray: '10, 10' // Tambahkan garis putus untuk membedakan arah
+        dashArray: "10, 10", // Tambahkan garis putus untuk membedakan arah
       };
 
       // Rute dari kurir ke customer
       const toCustomer = L.Routing.control({
         waypoints: [
           L.latLng(...courierPosition),
-          L.latLng(...customerPosition)
+          L.latLng(...customerPosition),
         ],
         lineOptions: {
-          styles: [greenRouteStyle]
+          styles: [greenRouteStyle],
         },
         show: false,
         addWaypoints: false,
-        createMarker: () => null // Hilangkan marker default
+        createMarker: () => null, // Hilangkan marker default
       }).addTo(map);
       newRoutingControls.push(toCustomer);
 
@@ -1559,7 +1554,7 @@ const OrderMap = ({ order }) => {
   // Refresh peta setiap 15 detik
   useEffect(() => {
     const interval = setInterval(() => {
-      setRefreshKey(prevKey => prevKey + 1); // Perbarui refreshKey setiap 15 detik
+      setRefreshKey((prevKey) => prevKey + 1); // Perbarui refreshKey setiap 15 detik
     }, 30000);
 
     return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount
@@ -1569,24 +1564,26 @@ const OrderMap = ({ order }) => {
     const map = useMap();
 
     useEffect(() => {
-      if (!position || !destination || order.status === 'completed') return;
+      if (!position || !destination || order.status === "completed") return;
 
       const routingControl = L.Routing.control({
         waypoints: [
           L.latLng(position[0], position[1]),
-          L.latLng(destination[0], destination[1])
+          L.latLng(destination[0], destination[1]),
         ],
         lineOptions: {
-          styles: [{ 
-            color: color,
-            opacity: 0.8,
-            weight: 5,
-            dashArray: '5,5'
-          }]
+          styles: [
+            {
+              color: color,
+              opacity: 0.8,
+              weight: 5,
+              dashArray: "5,5",
+            },
+          ],
         },
         show: false,
         addWaypoints: false,
-        createMarker: () => null
+        createMarker: () => null,
       }).addTo(map);
 
       return () => map.removeControl(routingControl);
@@ -1601,19 +1598,21 @@ const OrderMap = ({ order }) => {
         Pelacakan Pengiriman Real-time
       </Card.Header>
       <Card.Body style={{ height: "500px" }}>
-	  <MapContainer
-  key={refreshKey}
-  center={customerPosition || courierPosition || [-5.547964, 119.945908]}
-  zoom={customerPosition ? 15 : 13} // Default zoom 15 jika ada customerPosition
-  scrollWheelZoom={false}
-  style={{ height: "100%", width: "100%" }}
-  whenCreated={setMap}
->
+        <MapContainer
+          key={refreshKey}
+          center={
+            customerPosition || courierPosition || [-5.547964, 119.945908]
+          }
+          zoom={customerPosition ? 15 : 13} // Default zoom 15 jika ada customerPosition
+          scrollWheelZoom={false}
+          style={{ height: "100%", width: "100%" }}
+          whenCreated={setMap}
+        >
           {/* Tampilkan rute hanya jika status bukan 'completed' */}
-          {order.status !== 'completed' && (
-            <LeafletRoutingMachine 
-              position={courierPosition} 
-              destination={customerPosition} 
+          {order.status !== "completed" && (
+            <LeafletRoutingMachine
+              position={courierPosition}
+              destination={customerPosition}
               color="#4CAF50"
             />
           )}
@@ -1636,9 +1635,14 @@ const OrderMap = ({ order }) => {
           )}
 
           {/* Marker Kurir dengan Animasi (hanya jika status bukan 'completed') */}
-          {courierPosition && order.status !== 'completed' && (
+          {courierPosition && order.status !== "completed" && (
             <>
-              <AnimatedCourierMarker position={courierPosition} map={map} order={order} icon={courierIcon} />
+              <AnimatedCourierMarker
+                position={courierPosition}
+                map={map}
+                order={order}
+                icon={courierIcon}
+              />
               <Marker position={courierPosition} icon={CourierIcon}>
                 <Popup>
                   <div>
@@ -1671,24 +1675,34 @@ const OrderMap = ({ order }) => {
   );
 };
 
-
 const safeFormatDate = (date, dateFormat, locale) => {
-  if (!date || !isValid(new Date(date))) return 'Tanggal tidak valid';
+  if (!date || !isValid(new Date(date))) return "Tanggal tidak valid";
   return format(new Date(date), dateFormat, { locale });
 };
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('pending');
+  const [activeTab, setActiveTab] = useState("pending");
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const { fetchOrder, orders = [], fetchPayment, fetchHistoriesById } = useProductStore();
-  const currentUser = useProductStore((state) => state.currentUser); // Asumsikan currentUser 
+  const {
+    fetchOrder,
+    orders = [],
+    fetchPayment,
+    fetchHistoriesById,
+  } = useProductStore();
+  const currentUser = useProductStore((state) => state.currentUser); // Asumsikan currentUser
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-// const [selectedOrderId, setSelectedOrderId] = useState(null); // Untuk menyimpan ID pesanan yang dipilih
-const [showCancelModal, setShowCancelModal] = useState(false); // Untuk menampilkan modal konfirmasi pembatalan
-const [error, setError] = useState(null); // Untuk menyimpan pesan error
-const { cancelOrder, clearSelectedCart, toggleCartSelection, createRatProduct, createRatCourier } = useProductStore(); // Ambil fungsi cancelOrder dari store
+  // const [selectedOrderId, setSelectedOrderId] = useState(null); // Untuk menyimpan ID pesanan yang dipilih
+  const [showCancelModal, setShowCancelModal] = useState(false); // Untuk menampilkan modal konfirmasi pembatalan
+  const [error, setError] = useState(null); // Untuk menyimpan pesan error
+  const {
+    cancelOrder,
+    clearSelectedCart,
+    toggleCartSelection,
+    createRatProduct,
+    createRatCourier,
+  } = useProductStore(); // Ambil fungsi cancelOrder dari store
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   console.log("selected order", selectedOrder);
 
@@ -1699,11 +1713,13 @@ const navigate = useNavigate();
         await fetchPayment();
         await fetchHistoriesById();
 
-        WebSocketService.addCallback('status_update', (data) => {
-          useProductStore.setState(state => ({
-            orders: state.orders.map(order =>
-              order.order_id === data.order_id ? { ...order, status: data.status } : order
-            )
+        WebSocketService.addCallback("status_update", (data) => {
+          useProductStore.setState((state) => ({
+            orders: state.orders.map((order) =>
+              order.order_id === data.order_id
+                ? { ...order, status: data.status }
+                : order
+            ),
           }));
         });
       } catch (error) {
@@ -1712,18 +1728,18 @@ const navigate = useNavigate();
     };
     loadData();
 
-    WebSocketService.addCallback('status_update', loadData);
+    WebSocketService.addCallback("status_update", loadData);
 
     return () => {
-      WebSocketService.removeCallback('status_update', loadData);
+      WebSocketService.removeCallback("status_update", loadData);
     };
   }, [fetchOrder, fetchPayment, fetchHistoriesById]);
 
   // Tentukan apakah pengguna adalah kurir atau customer
   const isCourier = currentUser?.role === "courier";
 
-  const filteredOrders = orders.filter(order => 
-    order.status?.toLowerCase() === activeTab.toLowerCase()
+  const filteredOrders = orders.filter(
+    (order) => order.status?.toLowerCase() === activeTab.toLowerCase()
   );
 
   const groupItemsBySeller = (items) => {
@@ -1735,9 +1751,9 @@ const navigate = useNavigate();
             id: sellerId,
             name: item.seller_name,
             address: item.seller_address,
-            image: item.seller_profile_image
+            image: item.seller_profile_image,
           },
-          items: []
+          items: [],
         };
       }
       acc[sellerId].items.push(item);
@@ -1747,17 +1763,17 @@ const navigate = useNavigate();
 
   const getOrderSummary = (order) => {
     const items = order.items || [];
-    
+
     // Pastikan item.price dan item.quantity adalah angka
     const subtotal = items.reduce((sum, item) => {
       const price = parseFloat(item.price);
       const quantity = parseFloat(item.quantity);
-      return sum + (price * quantity);
+      return sum + price * quantity;
     }, 0);
-  
+
     // Pastikan shipping_cost adalah angka
     const shipping = parseFloat(order.shipping_cost[0]?.shipping_cost) || 0;
-  
+
     // Kembalikan hasil sebagai angka
     return { subtotal, shipping, total: subtotal + shipping };
   };
@@ -1768,7 +1784,7 @@ const navigate = useNavigate();
       console.log("Order canceled successfully:", result);
       toast.success("Pesanan berhasil dibatalkan!"); // Beri feedback ke pengguna
       setShowCancelModal(false); // Tutup modal setelah berhasil
-		window.location.reload();
+      window.location.reload();
       // Lakukan sesuatu setelah pembatalan berhasil, seperti refresh data
     } catch (error) {
       console.error("Failed to cancel order:", error);
@@ -1824,9 +1840,10 @@ const navigate = useNavigate();
   const handleConfirm = async () => {
     try {
       // Update status order menjadi 'completed'
-      await useProductStore.getState().updateOrderStatus(selectedOrder.order_id, { status: 'completed' });
-      
-  
+      await useProductStore
+        .getState()
+        .updateOrderStatus(selectedOrder.order_id, { status: "completed" });
+
       // Membuat rating untuk kurir
       const courierRatingData = {
         order_id: selectedOrder.order_id,
@@ -1836,12 +1853,12 @@ const navigate = useNavigate();
         rating_time: new Date(),
       };
       await createRatCourier(courierRatingData);
-  
+
       // Tutup modal
       setShowConfirmationModal(false);
-      
-      // navigate("/ratinglist")
-      // window.location.reload();
+
+      navigate(`/rating/${selectedOrder?.order_id}/product&kurir`)
+      window.location.reload();
     } catch (error) {
       console.error("Error during confirmation:", error);
     }
@@ -1851,27 +1868,35 @@ const navigate = useNavigate();
     <>
       <Navbar />
       <div className="container-fluid py-4 orders-container">
-        <h2 className="text-center mb-4 fw-bold text-primary">Riwayat Pesanan</h2>
-        
+        <h2 className="text-center mb-4 fw-bold text-primary">
+          Riwayat Pesanan
+        </h2>
+
         <StatusTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {selectedOrder && ['process', 'completed'].includes(activeTab) && (
+        {selectedOrder && ["process", "completed"].includes(activeTab) && (
           <Row className="mb-4">
             <Col md={6}>
               {isCourier ? (
-                <CourierTracking 
-                  orderId={selectedOrder.order_id} 
-                  courierId={selectedOrder.courier?.id}		
+                <CourierTracking
+                  orderId={selectedOrder.order_id}
+                  courierId={selectedOrder.courier?.id}
                   latCourier={selectedOrder.courier?.latitude}
                   lnCourier={selectedOrder.courier?.longitude}
-                  destination={[selectedOrder.courier?.latitude, selectedOrder.courier?.longitude]} // Koordinat tujuan (customer)
+                  destination={[
+                    selectedOrder.courier?.latitude,
+                    selectedOrder.courier?.longitude,
+                  ]} // Koordinat tujuan (customer)
                 />
               ) : (
                 <OrderMap order={selectedOrder} />
               )}
             </Col>
             <Col md={6}>
-              <OrderHistories orderId={selectedOrder.order_id} safeFormatDate={safeFormatDate} />
+              <OrderHistories
+                orderId={selectedOrder.order_id}
+                safeFormatDate={safeFormatDate}
+              />
             </Col>
           </Row>
         )}
@@ -1882,7 +1907,7 @@ const navigate = useNavigate();
             <p className="mt-3">Memuat data pesanan...</p>
           </div>
         ) : filteredOrders.length > 0 ? (
-          filteredOrders.map(order => {
+          filteredOrders.map((order) => {
             const summary = getOrderSummary(order);
             const groupedSellers = groupItemsBySeller(order.items);
 
@@ -1893,11 +1918,19 @@ const navigate = useNavigate();
                     <Col md={8}>
                       <h4 className="mb-1">Order #{order.order_code}</h4>
                       <small>
-                        {safeFormatDate(order.order_date, 'EEEE, d MMMM yyyy HH:mm', id)}
+                        {safeFormatDate(
+                          order.order_date,
+                          "EEEE, d MMMM yyyy HH:mm",
+                          id
+                        )}
                       </small>
                     </Col>
                     <Col md={4} className="text-end">
-                      <Badge bg="light" text="dark" className="fs-6 text-wrap me-2 mb-3">
+                      <Badge
+                        bg="light"
+                        text="dark"
+                        className="fs-6 text-wrap me-2 mb-3"
+                      >
                         {order.payment_method}
                       </Badge>
                       <Badge bg="success" className="fs-6">
@@ -1910,8 +1943,11 @@ const navigate = useNavigate();
                 <Card.Body>
                   <Row>
                     <Col md={8}>
-                      {Object.values(groupedSellers).map(seller => (
-                        <Card key={seller.sellerInfo.id} className="mb-4 seller-card">
+                      {Object.values(groupedSellers).map((seller) => (
+                        <Card
+                          key={seller.sellerInfo.id}
+                          className="mb-4 seller-card"
+                        >
                           <Card.Header className="bg-light">
                             <div className="d-flex align-items-center">
                               <img
@@ -1920,14 +1956,21 @@ const navigate = useNavigate();
                                 className="seller-avatar me-3"
                               />
                               <div>
-                                <h5 className="mb-0">{seller.sellerInfo.name}</h5>
-                                <small className="text-muted">{seller.sellerInfo.address}</small>
+                                <h5 className="mb-0">
+                                  {seller.sellerInfo.name}
+                                </h5>
+                                <small className="text-muted">
+                                  {seller.sellerInfo.address}
+                                </small>
                               </div>
                             </div>
                           </Card.Header>
                           <Card.Body>
                             {seller.items.map((item) => (
-                              <div key={item.product_id} className="product-item mb-3">
+                              <div
+                                key={item.product_id}
+                                className="product-item mb-3"
+                              >
                                 <Row className="align-items-center">
                                   <Col xs={3}>
                                     <img
@@ -1939,7 +1982,12 @@ const navigate = useNavigate();
                                   <Col xs={9}>
                                     <h6>{item.name}</h6>
                                     <div className="d-flex justify-content-between">
-                                      <span>Rp{(item.price * item.quantity).toLocaleString()}</span>
+                                      <span>
+                                        Rp
+                                        {(
+                                          item.price * item.quantity
+                                        ).toLocaleString()}
+                                      </span>
                                       <span>x{item.quantity}</span>
                                     </div>
                                   </Col>
@@ -1953,56 +2001,71 @@ const navigate = useNavigate();
 
                     {/* Bagian kanan (info kurir dan ringkasan) */}
                     <Col md={4}>
-                    {
-                      order.status === 'process' &&(
+                      {order.status === "process" && (
                         <Card className="mb-3">
-                        <Card.Header className="bg-light">
-                          <h5 className="mb-0">Info Kurir</h5>
-                        </Card.Header>
-                        <button onClick={() => navigate(`/courierinformation/${order.courier?.id}`)}>
-                        <Card.Body>
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={order.courier?.profile_image}
-                              alt={order.courier?.name}
-                              className="seller-avatar me-3"
-                            />
-                            <div>
-                              <h6 className="mb-1">{order.courier?.name || 'N/A'}</h6>
-                              <small className="text-muted">{order.courier?.phone_number || 'N/A'}</small>
-                            </div>
-                          </div>
-                        </Card.Body>
-                        </button>
-                      </Card>
-                      )
-                    }
-                    {
-                      order.status === 'pending' &&(
+                          <Card.Header className="bg-light">
+                            <h5 className="mb-0">Info Kurir</h5>
+                          </Card.Header>
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/courierinformation/${order.courier?.id}`
+                              )
+                            }
+                          >
+                            <Card.Body>
+                              <div className="d-flex align-items-center">
+                                <img
+                                  src={order.courier?.profile_image}
+                                  alt={order.courier?.name}
+                                  className="seller-avatar me-3"
+                                />
+                                <div>
+                                  <h6 className="mb-1">
+                                    {order.courier?.name || "N/A"}
+                                  </h6>
+                                  <small className="text-muted">
+                                    {order.courier?.phone_number || "N/A"}
+                                  </small>
+                                </div>
+                              </div>
+                            </Card.Body>
+                          </button>
+                        </Card>
+                      )}
+                      {order.status === "pending" && (
                         <Card className="mb-3">
-                        <Card.Header className="bg-light">
-                          <h5 className="mb-0">Info Kurir</h5>
-                        </Card.Header>
-                        <button onClick={() => navigate(`/courierinformation/${order.courier?.id}`)}>
-                        <Card.Body>
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={order.courier?.profile_image}
-                              alt={order.courier?.name}
-                              className="seller-avatar me-3"
-                            />
-                            <div>
-                              <h6 className="mb-1">{order.courier?.name || 'N/A'}</h6>
-                              <small className="text-muted">{order.courier?.phone_number || 'N/A'}</small>
-                            </div>
-                          </div>
-                        </Card.Body>
-                        </button>
-                      </Card>
-                      )
-                    }
-                      
-            
+                          <Card.Header className="bg-light">
+                            <h5 className="mb-0">Info Kurir</h5>
+                          </Card.Header>
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/courierinformation/${order.courier?.id}`
+                              )
+                            }
+                          >
+                            <Card.Body>
+                              <div className="d-flex align-items-center">
+                                <img
+                                  src={order.courier?.profile_image}
+                                  alt={order.courier?.name}
+                                  className="seller-avatar me-3"
+                                />
+                                <div>
+                                  <h6 className="mb-1">
+                                    {order.courier?.name || "N/A"}
+                                  </h6>
+                                  <small className="text-muted">
+                                    {order.courier?.phone_number || "N/A"}
+                                  </small>
+                                </div>
+                              </div>
+                            </Card.Body>
+                          </button>
+                        </Card>
+                      )}
+
                       <Card>
                         <Card.Header className="bg-light">
                           <h5 className="mb-0">Ringkasan Pembayaran</h5>
@@ -2016,6 +2079,14 @@ const navigate = useNavigate();
                             <span>Pengiriman:</span>
                             <span>Rp{summary.shipping.toLocaleString()}</span>
                           </div>
+                          <div className="d-flex justify-content-between mb-2">
+                            <span>Jarak Pengiriman:</span>
+                            <span>
+                              {order.shipping_cost[0]?.distance
+                                ? `${order.shipping_cost[0].distance} Meter`
+                                : "Tidak tersedia"}
+                            </span>
+                          </div>
                           <div className="d-flex justify-content-between fw-bold border-top pt-2">
                             <span>Total:</span>
                             <span className="text-success">
@@ -2027,91 +2098,99 @@ const navigate = useNavigate();
                     </Col>
                   </Row>
                 </Card.Body>
-				{order.status === 'pending' && (
-                <Card.Footer className="bg-light d-flex justify-content-between">
-                 
-				  {order.status === 'pending' && (
-  <>
-    <Button
-  variant="danger"
-  className="ms-2 w-100"
-  onClick={() => {
-    setSelectedOrder(order); // Simpan order yang dipilih
-    setShowCancelModal(true); // Tampilkan modal
-  }}
->
-  Batalkan pesanan
-</Button>
+                {order.status === "pending" && (
+                  <Card.Footer className="bg-light d-flex justify-content-between">
+                    {order.status === "pending" && (
+                      <>
+                        <Button
+                          variant="danger"
+                          className="ms-2 w-100"
+                          onClick={() => {
+                            setSelectedOrder(order); // Simpan order yang dipilih
+                            setShowCancelModal(true); // Tampilkan modal
+                          }}
+                        >
+                          Batalkan pesanan
+                        </Button>
 
+                        {selectedOrder && (
+                          <CancelModal
+                            show={showCancelModal}
+                            onHide={() => setShowCancelModal(false)} // Tutup modal
+                            order={order}
+                            onConfirm={() => handleCancelOrder(order.order_id)} // Konfirmasi pembatalan
+                            safeFormatDate={safeFormatDate} // Fungsi format tanggal
+                          />
+                        )}
+                      </>
+                    )}
+                  </Card.Footer>
+                )}
+                {order.status === "process" && (
+                  <Card.Footer className="bg-light d-flex justify-content-between">
+                    <Button
+                      className="w-50"
+                      variant="primary"
+                      onClick={() =>
+                        setSelectedOrder(
+                          selectedOrder?.order_id === order.order_id
+                            ? null
+                            : order
+                        )
+                      }
+                    >
+                      {selectedOrder?.order_id === order.order_id
+                        ? "Sembunyikan Detail"
+                        : "Lihat Detail Pengiriman"}
+                    </Button>
+                    {/* Tombol "Pesanan Diterima" */}
+                    {order.status === "process" && (
+                      <>
+                        <Button
+                          variant="success"
+                          className="ms-2 w-50"
+                          onClick={() => {
+                            setSelectedOrder(order); // Simpan order yang dipilih
+                            setShowConfirmationModal(true); // Tampilkan modal
+                          }}
+                        >
+                          Pesanan Diterima
+                        </Button>
 
-{selectedOrder && (
-  
-  <CancelModal
-        show={showCancelModal}
-        onHide={() => setShowCancelModal(false)} // Tutup modal
-        order={order}
-        onConfirm={() => handleCancelOrder(order.order_id)} // Konfirmasi pembatalan
-        safeFormatDate={safeFormatDate} // Fungsi format tanggal
-      />
-)}
-  </>
-)}
-                </Card.Footer>
-				)}
-                {order.status === 'process' && (
-                <Card.Footer className="bg-light d-flex justify-content-between">
-                  <Button 
-				  className="w-50"
-                    variant="primary" 
-                    onClick={() => setSelectedOrder(selectedOrder?.order_id === order.order_id ? null : order)}
-                  >
-                    {selectedOrder?.order_id === order.order_id ? 
-                      'Sembunyikan Detail' : 'Lihat Detail Pengiriman'}
-					  
-                  </Button>
-				  {/* Tombol "Pesanan Diterima" */}
-				  {order.status === 'process' && (
-  <>
-    <Button
-  variant="success"
-  className="ms-2 w-50"
-  onClick={() => {
-    setSelectedOrder(order); // Simpan order yang dipilih
-    setShowConfirmationModal(true); // Tampilkan modal
-  }}
->
-  Pesanan Diterima
-</Button>
+                        {selectedOrder && (
+                          <ConfirmationModal
+                            show={showConfirmationModal}
+                            onHide={() => setShowConfirmationModal(false)}
+                            order={selectedOrder} // Kirim order yang dipilih ke modal
+                            onConfirm={handleConfirm}
+                            safeFormatDate={safeFormatDate}
+                          />
+                        )}
+                      </>
+                    )}
+                  </Card.Footer>
+                )}
+                {order.status === "completed" && (
+                  <Card.Footer className="bg-light d-flex justify-content-between">
+                    <Button
+                      className="w-100"
+                      variant="primary"
+                      onClick={() =>
+                        setSelectedOrder(
+                          selectedOrder?.order_id === order.order_id
+                            ? null
+                            : order
+                        )
+                      }
+                    >
+                      {selectedOrder?.order_id === order.order_id
+                        ? "Sembunyikan Detail"
+                        : "Lihat Detail Pengiriman"}
+                    </Button>
+                  </Card.Footer>
+                )}
 
-
-{selectedOrder && (
-  <ConfirmationModal
-    show={showConfirmationModal}
-    onHide={() => setShowConfirmationModal(false)}
-    order={selectedOrder} // Kirim order yang dipilih ke modal
-    onConfirm={handleConfirm}
-    safeFormatDate={safeFormatDate}
-  />
-)}
-  </>
-)}
-                </Card.Footer>
-				)}
-                {order.status === 'completed' && (
-					<Card.Footer className="bg-light d-flex justify-content-between">
-					<Button 
-				  className="w-100"
-                    variant="primary" 
-                    onClick={() => setSelectedOrder(selectedOrder?.order_id === order.order_id ? null : order)}
-                  >
-                    {selectedOrder?.order_id === order.order_id ? 
-                      'Sembunyikan Detail' : 'Lihat Detail Pengiriman'}
-					  
-                  </Button>
-				  </Card.Footer>
-				)}
-				
-				{/* {order.status === 'cancelled' && (
+                {/* {order.status === 'cancelled' && (
 					<Card.Footer className="bg-light d-flex justify-content-between">
 					<Button 
 				  className="w-100"
@@ -2125,7 +2204,6 @@ const navigate = useNavigate();
 				  </Card.Footer>
 				)} */}
               </Card>
-
             );
           })
         ) : (

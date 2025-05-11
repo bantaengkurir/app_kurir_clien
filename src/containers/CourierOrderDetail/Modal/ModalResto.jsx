@@ -123,13 +123,16 @@ const ModalResto = ({ isOpen, onClose, courierOrderById }) => {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <CameraIcon size={50} />
+                button
               </button>
             </div>
             <div className="d-flex justify-content-center gap-2">
               <Button variant="secondary" onClick={onClose}>
                 Cancel
               </Button>
-              <button type="submit" className="btn btn-success" disabled={!imagePreview}>
+              <button type="submit" className="btn btn-success" 
+              disabled={!imagePreview}
+              >
                 Tiba di resto
               </button>
             </div>

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import  useAuthStore  from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 
 const LoginPage = () => {
@@ -10,11 +10,38 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { login, isLoggingIn } = useAuthStore();
+  const { login, isLoggingIn, authUser } = useAuthStore();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if(authUser){
+      navigate('/')
+    }
+  },[])
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await login(formData);
+  //     navigate('/')
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData);
+    try {
+      const user = await login(formData);
+      if (user) {
+        navigate('/', { replace: true });
+      }
+      window.location.reload();
+    } catch (error) {
+      // Error sudah ditangani di store, tidak perlu melakukan apa-apa di sini
+      // Kecuali jika Anda ingin menambahkan handling khusus
+      console.error('Login page error:', error);
+    }
   };
 
   // console.log("LoginPage rendered", formData);
