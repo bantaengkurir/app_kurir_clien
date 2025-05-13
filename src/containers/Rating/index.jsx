@@ -131,7 +131,7 @@ const ProductRating = () => {
           </div>
           
           <div className="alert alert-warning mb-4">
-            ➤ Nilai untuk mendapatkan s/d 25 Koin Koin Shopee!
+            ➤ Nilai Produk dan Kurir agar dapat memantau kualitas layanan kami
           </div>
 
           {orderById.items?.length > 0 ? (

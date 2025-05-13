@@ -94,7 +94,7 @@ const ProductRating = () => {
         <Card.Body>
           <h4 className="mb-4">Nilai Produk</h4>
           <div className="alert alert-warning mb-4">
-            ➤ Nilai untuk mendapatkan s/d 25 Koin Koin Shopee!
+            ➤ Nilai Produk dan Kurir agar dapat memantau kualitas layanan kami
           </div>
           {!orders.length ? (
             <div className="text-center mt-5">

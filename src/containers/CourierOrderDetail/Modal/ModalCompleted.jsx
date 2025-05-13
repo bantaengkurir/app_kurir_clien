@@ -78,7 +78,13 @@ const ModalCompleted = ({ isOpen, onClose, courierOrderById }) => {
 
   return (
     <div className={`modal-1-overlay ${isOpen ? "open" : ""}`}>
-      <div className="modal-1-modal">
+      <div style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}>
         <Card.Header>
           <Card.Title className="text-center mb-3">Konfirmasi Pesanan</Card.Title>
         </Card.Header>

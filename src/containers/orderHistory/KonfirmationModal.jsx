@@ -44,7 +44,13 @@ const total_price = parseFloat(order.total) + parseFloat(order.shipping_cost[0]?
 
   return (
     <div className={`modal-1-overlay ${show ? "open" : ""}`}>
-      <div className="modal-1-modal">
+      <div style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}>
 	  <Card.Header>
         <Card.Title>Konfirmasi Pesanan Diterima</Card.Title>
       </Card.Header>

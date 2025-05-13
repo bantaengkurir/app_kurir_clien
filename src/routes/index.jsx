@@ -125,54 +125,54 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
         // </ProtectedRoute>
       ),
     },
-    {
-      path: '/shop',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <Shop />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/kurir',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <Kurir />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/kurirlocation',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <KurirLocation />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/kurirlocationupdate',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <KurirLocationUpdate />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/courierinformation/:id',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <CourierInfromation />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/customer',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <Customer />
-        // </ProtectedRoute>
-      ),
-    },
+    // {
+    //   path: '/shop',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <Shop />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/kurir',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <Kurir />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/kurirlocation',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <KurirLocation />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/kurirlocationupdate',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <KurirLocationUpdate />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/courierinformation/:id',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <CourierInfromation />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/customer',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <Customer />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
     {
       path: '/payment',
       element: (
@@ -213,14 +213,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
         // </ProtectedRoute>
       ),
     },
-    {
-      path: '/courier/:id/courier&order_detail',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <CourierOrderDetail />
-        // </ProtectedRoute>
-      ),
-    },
+    // {
+    //   path: '/courier/:id/courier&order_detail',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <CourierOrderDetail />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
     {
       path: '/chatSeller/:id',
       element: (
@@ -229,22 +229,22 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
         // </ProtectedRoute>
       ),
     },
-    {
-      path: '/courier&sallery',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <CourierEarning />
-        // </ProtectedRoute>
-      ),
-    },
-    {
-      path: '/detail/:id',
-      element: (
-        // <ProtectedRoute allowedRole='customer' >
-          <DetailShop />
-        // </ProtectedRoute>
-      ),
-    },
+    // {
+    //   path: '/courier&sallery',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <CourierEarning />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
+    // {
+    //   path: '/detail/:id',
+    //   element: (
+    //     // <ProtectedRoute allowedRole='customer' >
+    //       <DetailShop />
+    //     // </ProtectedRoute>
+    //   ),
+    // },
     {
       path: '/checkout',
       element: (
@@ -277,38 +277,38 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
         // </ProtectedRouteSeller>
       ),
     },
-    {
-      path: '/updateproduct/:id',
-      element: (
-        // <ProtectedRouteSeller allowedRole='seller'>
-          <UpdateProduct />
-        // </ProtectedRouteSeller>
-      ),
-    },
-    {
-      path: '/addproduct',
-      element: (
-        // <ProtectedRouteSeller allowedRole='seller'>
-          <AddProduct />
-        // </ProtectedRouteSeller>
-      ),
-    },
-    {
-      path: '/invoice',
-      element: (
-        // <ProtectedRouteSeller allowedRole='seller'>
-          <Invoice />
-        // </ProtectedRouteSeller>
-      ),
-    },
-    {
-      path: '/searchproduct',
-      element: (
-        // <ProtectedRouteSeller allowedRole='customer' >
-          <Search />
-        // </ProtectedRouteSeller>
-      ),
-    },
+    // {
+    //   path: '/updateproduct/:id',
+    //   element: (
+    //     // <ProtectedRouteSeller allowedRole='seller'>
+    //       <UpdateProduct />
+    //     // </ProtectedRouteSeller>
+    //   ),
+    // },
+    // {
+    //   path: '/addproduct',
+    //   element: (
+    //     // <ProtectedRouteSeller allowedRole='seller'>
+    //       <AddProduct />
+    //     // </ProtectedRouteSeller>
+    //   ),
+    // },
+    // {
+    //   path: '/invoice',
+    //   element: (
+    //     // <ProtectedRouteSeller allowedRole='seller'>
+    //       <Invoice />
+    //     // </ProtectedRouteSeller>
+    //   ),
+    // },
+    // {
+    //   path: '/searchproduct',
+    //   element: (
+    //     // <ProtectedRouteSeller allowedRole='customer' >
+    //       <Search />
+    //     // </ProtectedRouteSeller>
+    //   ),
+    // },
     {
       path: '/notfound',
       element: (

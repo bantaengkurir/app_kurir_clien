@@ -110,6 +110,7 @@ import Icon from "../../../img/close.svg";
 import { Button, Spinner, Alert } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import "./modalStyle.css"; // Import your CSS file here
 
 const PaymentModal = ({ isOpen, onClose, order, onSubmit }) => {
   const [paymentMethod, setPaymentMethod] = useState('transfer');
@@ -194,7 +195,16 @@ const PaymentModal = ({ isOpen, onClose, order, onSubmit }) => {
         </button>
       </div>
       
-      <div className="modal-1-modal">
+      <div 
+      // className="modal-1-modal"
+      style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}
+      >
         <form onSubmit={handleSubmit}>
           <div className="modal-header border-0 pb-0">
             <h3 className="fw-bold text-primary">

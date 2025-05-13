@@ -945,7 +945,7 @@ const Index = () => {
   const calculateTimeLeft = (createdAt) => {
     const orderTime = new Date(createdAt);
     const now = new Date();
-    const endTime = new Date(orderTime.getTime() + 5 * 60000); // Tambah 1 menit
+    const endTime = new Date(orderTime.getTime() + 10 * 60000); // Tambah 1 menit
     const difference = endTime - now;
 
     if (difference <= 0) return "00:00";

@@ -40,7 +40,16 @@ const handleUpdate = async () => {
 
   return (
     <div className={`modal-1-overlay ${show ? "open" : ""}`}>
-      <div className="modal-1-modal">
+      <div
+      //  className="modal-1-modal"
+      style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}
+       >
     <Card show={show} onHide={onHide}>
       <Card.Header closeButton>
         <Card.Title>Pesanan Baru</Card.Title>

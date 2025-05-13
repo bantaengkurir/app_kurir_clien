@@ -44,7 +44,15 @@ const Modal1 = ({ isOpen, toggleModal }) => {
                 <img src={Icon} alt="Close" />
               </button>
             </div>
-        <div className="modal-1-modal">
+        <div 
+        style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}
+        >
           <form onSubmit={handleSearchSubmit}>
             
             <div className="d-flex justify-content-center mt-5">

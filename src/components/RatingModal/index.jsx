@@ -599,7 +599,17 @@ const Modal1 = ({ isOpen, toggleModal }) => {
             <img src={Icon} alt="Close" />
           </button>
         </div>
-        <div className="modal-1-modal">
+        <div 
+        // className="modal-1-modal"
+        style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}
+        
+        >
           <h2 className="mt-3 text-center"> Berikan Penilaian Anda </h2>
           {productOrders.map((product) => (
             <div style={styles.container} key={product.id}>
