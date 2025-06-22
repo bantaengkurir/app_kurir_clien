@@ -390,6 +390,7 @@ import { GoogleMap, Marker, LoadScript, InfoWindow } from "@react-google-maps/ap
 import axios from "axios";
 import toast from "react-hot-toast";
 import io from "socket.io-client"; // Import socket.io-client
+import useAuthStore from "../../store/useAuthStore";
 
 const Index = () => {
   const [note, setNote] = useState("");
@@ -407,7 +408,10 @@ const Index = () => {
   const [socket, setSocket] = useState(null); // State untuk WebSocket
 
   const { cartItems, fetchCarts, createOrder, selectedCart, clearSelectedCart } = useProductStore();
+  const {authUser} = useAuthStore();
   const navigate = useNavigate();
+
+  console.log("authUser", authUser)
 
   // Fetch cart items saat komponen dimount
   useEffect(() => {
@@ -416,7 +420,7 @@ const Index = () => {
 
   // Hitung subtotal
   const subtotal = selectedCart.reduce(
-    (acc, product) => acc + product.quantity * product.product.price,
+    (acc, product) => acc + product.quantity * product.variant?.price,
     0
   );
 
@@ -476,120 +480,92 @@ const Index = () => {
     setSelectedLocation({ lat, lng });
   };
 
-  // Fungsi untuk membuat order
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  // Fungsi untuk membuat pesanan
+const handleCreate = async (e) => {
+  e.preventDefault();
+  if (isSubmitting) return;
+  setIsSubmitting(true);
 
-    // Validasi data sebelum membuat pesanan
-    if (!payment_method) {
-      alert("Silakan pilih metode pembayaran!");
+  // Validasi
+  if (!payment_method) {
+    toast.error("Pilih metode pembayaran!");
+    setIsSubmitting(false);
+    return;
+  }
+
+  if (!selectedLocation) {
+    toast.error("Pilih lokasi pengiriman!");
+    setIsSubmitting(false);
+    return;
+  }
+
+  // Validasi stok
+  for (const item of selectedCart) {
+    if (item.variant.stock < item.quantity) {
+      toast.error(`Stok ${item.variant.name} tidak mencukupi!`);
       setIsSubmitting(false);
       return;
     }
+  }
 
-    if (!selectedLocation || !selectedLocation.lat || !selectedLocation.lng) {
-      alert("Silakan pilih lokasi pengiriman!");
-      setIsSubmitting(false);
-      return;
+  const orderData = {
+    items: selectedCart.map(item => ({
+      variant_id: item.variant.id,
+      quantity: item.quantity
+    })),
+    payment_method,
+    shipping_cost: {
+      latitude: selectedLocation.lat,
+      longitude: selectedLocation.lng
     }
+  };
+
+  try {
+    const response = await createOrder(orderData);
+    
+    // Pastikan response valid
+    if (!response?.data) {
+      throw new Error("Invalid response from server");
+    }
+
+    const order = response.data;
+    console.log("Order data for WebSocket:", order);
+
+    // Setup WebSocket
+    const newSocket = io("http://localhost:8081", {
+      query: {
+        userId: authUser.id,
+        role: "customer",
+        // orderId: order.order_id || order.id // Sesuaikan dengan field yang ada
+      }
+    });
 
     
 
-    const orderData = {
-      items: selectedCart.map((item) => ({
-        product_id: item.product.id,
-        quantity: item.quantity,
-      })),
-      payment_method,
-      shipping_cost: {
-        latitude: parseFloat(selectedLocation.lat.toFixed(6)),
-        longitude: parseFloat(selectedLocation.lng.toFixed(6)),
-      },
-    };
+    setSocket(newSocket);
+    
+    newSocket.on("locationUpdated", (data) => {
+      setCourierLocation({ lat: data.latitude, lng: data.longitude });
+    });
 
-    console.log("Order Data:", orderData);
+    navigate("/payment");
+    window.location.reload();
 
-    console.log("error message", error.message)
-
-    try {
-      // Validasi stok produk
-      for (let i = 0; i < selectedCart.length; i++) {
-        if (selectedCart[i].product.stock < selectedCart[i].quantity) {
-          alert(`Stok produk ${selectedCart[i].product.title} tidak mencukupi!`);
-          setIsSubmitting(false);
-          return;
-        }
-      }
-      // if(error.message == "Tidak ada courier yang tersedia"){
-      //   toast.error("Kurir tidak tersedia")
-      // }else{
-      //   const order = await createOrder(orderData, setError); // Panggil createOrder
-      //   toast.success("Pesanan berhasil dibuat!"); // Notifikasi sukses
-        
-      //   // navigate("/payment");
-
-      //   window.location.reload();
-      //   // Buka koneksi WebSocket setelah order berhasil dibuat
-      //   const newSocket = io("http://localhost:5173", {
-      //     query: {
-      //       userId: order.user_id, // ID customer
-      //       role: "customer",
-      //       orderId: order.id, // ID order
-      //     },
-      //   });
-  
-      //   setSocket(newSocket);
-  
-      //   // Terima update lokasi kurir
-      //   newSocket.on("locationUpdated", (data) => {
-      //     console.log("Courier location updated:", data);
-      //     setCourierLocation({ lat: data.latitude, lng: data.longitude });
-      //   });
-      //   window.location.reload();
-      //   navigate("/payment");
-      // }
-
-      // Panggil API untuk membuat pesanan
-      const order = await createOrder(orderData, setError);
-
-      // Jika pesanan berhasil dibuat, tampilkan notifikasi sukses
-      // toast.success("Pesanan berhasil dibuat!");
-      // window.location.reload();
-  
-      // Buka koneksi WebSocket setelah order berhasil dibuat
-      const newSocket = io("http://localhost:5174", {
-          query: {
-              userId: order.user_id, // ID customer
-              role: "customer",
-              orderId: order.id, // ID order
-          },
-      });
-  
-      setSocket(newSocket);
-  
-      // Terima update lokasi kurir
-      newSocket.on("locationUpdated", (data) => {
-          console.log("Courier location updated:", data);
-          setCourierLocation({ lat: data.latitude, lng: data.longitude });
-      });
-      // Redirect ke halaman pembayaran hanya jika tidak ada error
-      navigate("/payment");
-  
-  
-
-} catch (error) {
-    // Tangkap error dan tampilkan notifikasi sesuai pesan error
+  } catch (error) {
+    console.error("Order error:", error);
+    
     if (error.message === "Tidak ada courier yang tersedia") {
-        toast.error("Kurir tidak tersedia");
-    } 
-    // else {
-    //     // Handle error lainnya jika diperlukan
-    //     toast.error("Terjadi kesalahan saat membuat pesanan");
-    // }
+      toast.error("Kurir tidak tersedia");
+    } else if (!error.response) {
+      toast.error(error.message || "Terjadi kesalahan");
+    }
+    // Error dari server sudah di-toast oleh createOrder
+  } finally {
+    setIsSubmitting(false);
   }
-  };
+};
+
+
 
   // Fungsi untuk membersihkan keranjang
   const handleClear = () => {
@@ -751,30 +727,30 @@ const Index = () => {
                         </thead>
                         <tbody>
                           {selectedCart.map((product) => (
-                            <tr key={product.product.id}>
+                            <tr key={product.variant?.id}>
                               <th scope="row">
                                 <div className="d-flex align-items-center mt-2">
                                   <img
-                                    src={product.product.image_url}
+                                    src={product.variant?.img_url}
                                     className="img-fluid rounded-circle"
                                     style={{ width: 90, height: 90 }}
                                     alt=""
                                   />
                                 </div>
                               </th>
-                              <td>{product.product.name}</td>
+                              <td>{product.variant.name}</td>
                               <td>
                                 {new Intl.NumberFormat("id-ID", {
                                   style: "currency",
                                   currency: "IDR",
-                                }).format(product.product.price)}
+                                }).format(product.variant?.price)}
                               </td>
                               <td>{product.quantity}</td>
                               <td>
                                 {new Intl.NumberFormat("id-ID", {
                                   style: "currency",
                                   currency: "IDR",
-                                }).format(product.quantity * product.product.price)}
+                                }).format(product.quantity * product.variant?.price)}
                               </td>
                             </tr>
                           ))}
@@ -809,7 +785,11 @@ const Index = () => {
               </form>
             </div>
           </div>
-          <Footer />
+          <footer className="bg-gray-800 text-white py-4 text-xs">
+        <div className="container mx-auto px-4 text-center">
+          <p>© 2025 Food Delivery App. All rights reserved.</p>
+        </div>
+      </footer>
         </>
       )}
     </>

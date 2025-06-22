@@ -44,9 +44,9 @@ const ProductRating = () => {
 
 
    // Fungsi untuk mengecek apakah produk sudah dinilai
-   const isProductRated = (orderId, productId) => {
+   const isProductRated = (orderId, variantId) => {
     const rating = productRatings.find(
-      (r) => r.order_id === orderId && r.product_id === productId
+      (r) => r.order_id === orderId && r.variant_id === variantId
     );
     return rating && rating.rating !== null; // Kembalikan true jika rating tidak null
   };
@@ -74,20 +74,43 @@ const ProductRating = () => {
   let hasNullRating = true; // Awalnya dianggap tidak ada rating null (true)
   
   // Iterasi melalui setiap item di checkRating
-  for (let i = 0; i < checkRating.length; i++) {
-    // Cari rating di productRatings yang memiliki product_id dan order_id yang sama
-    const matchingRating = productRatings.find(
-      rating => 
-        rating.product_id === checkRating[i].product_id && 
-        rating.order_id === orderById.order_id
-    );
+  // for (let i = 0; i < checkRating.length; i++) {
+  //   // Cari rating di productRatings yang memiliki product_id dan order_id yang sama
+  //   const matchingRating = productRatings.find(
+  //     rating => 
+  //       rating.variant_id === checkRating[i].variant_id && 
+  //       rating.order_id === orderById.order_id
+  //   );
+  //   console.log("matching rating", matchingRating);
   
-    // Jika ditemukan rating yang cocok dan rating-nya null
-    if (matchingRating && matchingRating.rating === null) {
-      hasNullRating = false; // Jika ditemukan rating null, set variabel ke false
-      break; // Keluar dari loop karena sudah ditemukan rating null
-    }
+  //   // Jika ditemukan rating yang cocok dan rating-nya null
+  //   if (matchingRating && matchingRating.rating === null) {
+  //     hasNullRating = false; // Jika ditemukan rating null, set variabel ke false
+  //     break; // Keluar dari loop karena sudah ditemukan rating null
+  //   }
+  // }
+
+  for (let i = 0; i < checkRating.length; i++) {
+  const currentVariantId = checkRating[i].variant_id;
+  const currentOrderId = orderById.order_id; // Pastikan ini benar
+  
+  console.log(`Mencari rating untuk variant: ${currentVariantId}, order: ${currentOrderId}`);
+
+  const matchingRating = productRatings.find(
+    rating => 
+      rating.variant_id === currentVariantId && 
+      rating.order_id === currentOrderId
+  );
+
+  console.log("Hasil pencarian:", matchingRating);
+
+  // Periksa jika matchingRating tidak ditemukan (undefined) atau rating-nya null
+  if (!matchingRating || matchingRating.rating === null) {
+    hasNullRating = false;
+    console.log("Rating belum diberikan untuk item ini");
+    break;
   }
+}
   
   console.log("hasNullRating:", hasNullRating); // Output: true atau false
   const handleSubmit = async () => {
@@ -102,10 +125,15 @@ const ProductRating = () => {
           rating: rating, // Rating yang diberikan
           review: review, // Komentar yang diberikan
         };
+
+        if(!rating || !review) {
+          toast.error("Rating dan review tidak boleh kosong");
+          return;
+        }
   
         // Panggil fungsi updateRatProduct dari store
         await updateRatCourier(newData);
-        window.location.reload();
+        // window.location.reload();
         // alert("berhasil dinilai")
       }
       
@@ -137,7 +165,7 @@ const ProductRating = () => {
           {orderById.items?.length > 0 ? (
             orderById.items.map((item) => (
           <ProductRatingSection
-          key={item.product_id}
+          key={item.variant_id}
           orderById={orderById}
           productRatings={productRatings}
           isProductRated={isProductRated}
@@ -193,9 +221,10 @@ const ProductRating = () => {
       ) : (
         <>
         {/* Photo/Video Upload */}
-        <Button variant="outline-secondary" className="mb-3">
+        {/* <Button variant="outline-secondary" className="mb-3">
             Tambahkan 1 foto dan video
-          </Button>
+          </Button> */}
+          <h5 className="mb-3">Penilaian Kurir</h5>
 
           {/* Review Input */}
           <Form.Group className="mb-3">

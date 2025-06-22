@@ -48,6 +48,7 @@ import CourierOrderDetail from '../containers/CourierOrderDetail';
 import CourierSallery from '../containers/Couriersallery';
 import CourierEarning from '../containers/CourierEarning';
 import OTPPage from '../pages/Otp';
+import DetailProduct from '../pages/DetailProduct';
 // import { Toaster } from "react-hot-toast";
 
 const Index = () => {
@@ -55,13 +56,13 @@ const Index = () => {
 const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   // const { theme } = useThemeStore();
 
-  console.log({ onlineUsers });
+  // console.log({ onlineUsers });
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log("ini auth user", authUser );
+  // console.log("ini auth user", authUser );
 
   if (isCheckingAuth && !authUser)
     return (
@@ -157,14 +158,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
     //     // </ProtectedRoute>
     //   ),
     // },
-    // {
-    //   path: '/courierinformation/:id',
-    //   element: (
-    //     // <ProtectedRoute allowedRole='customer' >
-    //       <CourierInfromation />
-    //     // </ProtectedRoute>
-    //   ),
-    // },
+    {
+      path: '/courierinformation/:id',
+      element: (
+        // <ProtectedRoute allowedRole='customer' >
+          <CourierInfromation />
+        // </ProtectedRoute>
+      ),
+    },
     // {
     //   path: '/customer',
     //   element: (
@@ -277,6 +278,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
         // </ProtectedRouteSeller>
       ),
     },
+    {
+      path: '/product-detail/:id/detail',
+      element: (
+        // <ProtectedRouteSeller allowedRole='seller' >
+          <DetailProduct />
+        // </ProtectedRouteSeller>
+      ),
+    },
     // {
     //   path: '/updateproduct/:id',
     //   element: (
@@ -301,14 +310,14 @@ const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
     //     // </ProtectedRouteSeller>
     //   ),
     // },
-    // {
-    //   path: '/searchproduct',
-    //   element: (
-    //     // <ProtectedRouteSeller allowedRole='customer' >
-    //       <Search />
-    //     // </ProtectedRouteSeller>
-    //   ),
-    // },
+    {
+      path: '/search',
+      element: (
+        // <ProtectedRouteSeller allowedRole='customer' >
+          <Search />
+        // </ProtectedRouteSeller>
+      ),
+    },
     {
       path: '/notfound',
       element: (

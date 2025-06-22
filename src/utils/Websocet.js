@@ -30,7 +30,7 @@ class WebSocketService {
             this.disconnect(); // Pastikan koneksi sebelumnya ditutup
         }
 
-        const wsUrl = `http://localhost:8001/api/orders/${orderId}/`;
+        const wsUrl = `http://localhost:8001/api/orders/${orderId}`;
         this.socket = new WebSocket(wsUrl);
 
         this.socket.onopen = () => {

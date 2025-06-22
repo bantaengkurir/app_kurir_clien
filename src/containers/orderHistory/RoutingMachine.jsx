@@ -51,8 +51,8 @@ export const RoutingMachine = ({ waypoints, color, map }) => {
   useEffect(() => {
     if (!map || waypoints.length < 2) return;
 
-    console.log("Waypoints:", waypoints);
-    console.log("Map instance:", map);
+    // console.log("Waypoints:", waypoints);
+    // console.log("Map instance:", map);
 
     // Hapus rute lama sebelum membuat yang baru
     if (routingControlRef.current) {

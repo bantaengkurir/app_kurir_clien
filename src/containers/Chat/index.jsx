@@ -25,7 +25,7 @@ const ChatContainer = () => {
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   const chatContainerRef = useRef(null);
-  const { theme, themeChat } = localStorage.getItem("chat-theme");
+  // const { theme, themeChat } = localStorage.getItem("chat-theme");
   const navigate = useNavigate();
 
 
@@ -87,7 +87,7 @@ const ChatContainer = () => {
 
   if (isMessagesLoading) {
     return (
-      <div className={`flex-1 flex flex-col overflow-auto`} data-theme={theme}>
+      <div className={`flex-1 flex flex-col overflow-auto`} >
         <div className="p-2.5 border-b border-base-300">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -125,7 +125,7 @@ const ChatContainer = () => {
     <div
       ref={chatContainerRef}
       className={`flex-1 flex flex-col overflow-auto`}
-      data-theme={theme}
+      // data-theme={theme}
     >
       <div className="p-2.5 border-b border-base-300">
       <div className="flex items-center justify-between">
@@ -182,7 +182,7 @@ const ChatContainer = () => {
             <div
               className={` ${
                 message.sender_id === authUser.id
-                  ? `chat-bubble flex flex-col bg-blue-500 ${themeChat}`
+                  ? "chat-bubble flex flex-col bg-blue-500"
                   : "chat-bubble bg-neutral-500 bg-opacity-100 flex flex-col"
               }`}
             >

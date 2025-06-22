@@ -98,7 +98,7 @@ export const RatingModal = ({ show, onHide, item, orderById, updateRatProduct })
     try {
       const newData = {
         order_id: orderById.order_id, // Ambil order_id dari orderById
-        product_id: item.product_id, // Ambil product_id dari item
+        variant_id: item.variant_id, // Ambil product_id dari item
         rating: rating, // Rating yang diberikan
         comment: review, // Komentar yang diberikan
       };
@@ -108,7 +108,7 @@ export const RatingModal = ({ show, onHide, item, orderById, updateRatProduct })
 
       // Tutup modal
       onHide();
-      window.location.reload()
+      // window.location.reload()
     } catch (error) {
       console.error("Error during confirmation:", error);
     }
@@ -116,7 +116,13 @@ export const RatingModal = ({ show, onHide, item, orderById, updateRatProduct })
 
   return (
     <div className={`modal-1-overlay ${show ? "open" : ""}`}>
-      <div className="modal-1-modal">
+      <div style={{position: "fixed",
+        backgroundColor: "white",
+  borderRadius: "12px",
+  padding: "2rem",
+  top: "50%",
+  left:" 50%",
+  transform: "translate(-50%, -50%)"}}>
         <Card.Header>
         <Card.Title>Silahkan Berikan Penilaian Mengenai Produk Ini</Card.Title>
       </Card.Header>

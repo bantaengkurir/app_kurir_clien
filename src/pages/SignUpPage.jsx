@@ -144,7 +144,7 @@
 //                     </div>
 //                     <input
 //                       type="text"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       placeholder="John Doe"
 //                       value={formData.nama}
 //                       onChange={(e) =>
@@ -164,7 +164,7 @@
 //                     </div>
 //                     <input
 //                       type="email"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       placeholder="you@example.com"
 //                       value={formData.email}
 //                       onChange={(e) =>
@@ -270,7 +270,7 @@
 //                     </div>
 //                     <input
 //                       type="file"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       accept="image/*"
 //                       onChange={handleFileChange}
 //                     />
@@ -287,7 +287,7 @@
 //                     </div>
 //                     <input
 //                       type="text"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       placeholder="+62 123 4567 8901"
 //                       value={formData.hp}
 //                       onChange={(e) =>
@@ -307,7 +307,7 @@
 //                     </div>
 //                     <input
 //                       type="text"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       placeholder="Jakarta"
 //                       value={formData.tempat_lahir}
 //                       onChange={(e) =>
@@ -330,7 +330,7 @@
 //                     </div>
 //                     <input
 //                       type="date"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       value={formData.tanggal_lahir}
 //                       onChange={(e) =>
 //                         setFormData({
@@ -356,7 +356,7 @@
 //                       <VenusAndMars className="h-5 w-5 text-gray-400" />
 //                     </div>
 //                     <select
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       value={formData.jenis_kelamin}
 //                       onChange={(e) =>
 //                         setFormData({
@@ -382,7 +382,7 @@
 //                     </div>
 //                     <input
 //                       type="text"
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+//                       className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
 //                       placeholder="Jl. Contoh No. 123"
 //                       value={formData.alamat}
 //                       onChange={(e) =>
@@ -456,22 +456,24 @@ import {
   Calendar,
   // VenusAndMars,
   MessageSquare,
+  Cake,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { FaBolt, FaMapMarkerAlt, FaMoneyBillWave, FaMotorcycle } from "react-icons/fa";
 
 const SignUpPage = () => {
   const [step, setStep] = useState(1); // Langkah saat ini
   const [showPassword, setShowPassword] = useState(false);  
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "",
     confirmPassword: "", // Tambahkan state untuk konfirmasi password
     address: "",
     profile_image: null,
@@ -489,8 +491,8 @@ const SignUpPage = () => {
     switch (step) {
       case 1:
         if (!formData.name.trim()) return toast.error("Nama lengkap wajib diisi");
-        if (!formData.role)
-          return toast.error("Jenis pengguna wajib diisi");
+        // if (!formData.role)
+        //   return toast.error("Jenis pengguna wajib diisi");
         if (!formData.email.trim()) return toast.error("Email wajib diisi");
         if (!/\S+@\S+\.\S+/.test(formData.email))
           return toast.error("Format email tidak valid");
@@ -642,27 +644,57 @@ const SignUpPage = () => {
   
   
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    const isValid = validateStep();
-    if (isValid) {
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
-      });
+  //   const isValid = validateStep();
+  //   if (isValid) {
+  //     const formDataToSend = new FormData();
+  //     Object.keys(formData).forEach((key) => {
+  //       formDataToSend.append(key, formData[key]);
+  //     });
 
-      // Simpan email di localStorage sebelum signup
+      
+
+  //     // Panggil fungsi signup
+  //     await signup(formDataToSend);
+
+  //     // Simpan email di localStorage sebelum signup
+  //     localStorage.setItem("email", formData.email);
+
+  //     navigate("/otp");
+  //     // window.location.href = "/otp";
+  //     // toast.success("Pendaftaran berhasil");
+  //   }
+  // };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const isValid = validateStep();
+  if (!isValid) return; // Berhenti jika validasi gagal
+
+  try {
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
+    });
+
+    // Tunggu hasil signup dan tangkap return value-nya
+    const result = await signup(formDataToSend);
+
+    // Hanya navigasi jika signup berhasil
+    if (result?.success) {
       localStorage.setItem("email", formData.email);
-
-      // Panggil fungsi signup
-      await signup(formDataToSend);
-      window.location.href = "/otp";
-      toast.success("Pendaftaran berhasil");
+      window.location.replace("/otp");
     }
-  };
-
-  // Handle perubahan file foto
+    
+  } catch (error) {
+    console.error("Signup error:", error);
+    // Tidak perlu navigate, biarkan user tetap di halaman
+  }
+};
+ 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -678,12 +710,10 @@ const SignUpPage = () => {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
-                {/* <img src={logoimipas} className="w-7 h-7 text-blue-600 rounded-full" /> */}
+              <div className="w-20 h-20 rounded-xl bg-orange-100 flex items-center justify-center group-hover:bg-orange-200 transition-all duration-300 shadow-lg hover:shadow-orange-200/50">
+                <Cake className="w-8 h-8 text-orange-400" />
               </div>
-              <h1 className="text-3xl font-bold mt-4 text-gray-900">
-                Buat Akun
-              </h1>
+              <h1 className="text-3xl font-bold mt-4 text-gray-800">Buat <span className="text-orange-400">Akun</span></h1>
               <p className="text-gray-500">Langkah {step} dari 3</p>
             </div>
           </div>
@@ -703,36 +733,13 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type="text"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
                     />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Jenis Pengguna
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      {/* <VenusAndMars className="h-5 w-5 text-gray-400" /> */}
-                    </div>
-                    <select
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                      value={formData.role}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          role: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Pilih Jenis Pengguna</option>
-                      <option value="courier">Kurir</option>
-                    </select>
                   </div>
                 </div>
 
@@ -746,7 +753,7 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type="email"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       placeholder="you@example.com"
                       value={formData.email}
                       onChange={(e) =>
@@ -766,7 +773,7 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type={showPassword ? "text" : "password"}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={(e) =>
@@ -787,11 +794,78 @@ const SignUpPage = () => {
                     </button>
                   </div>
                   {/* Petunjuk password */}
-                  <div className="mt-2">
+                  {/* <div className="mt-2">
                     <p className="text-xs text-gray-500">
                       Password minimal berisi 8 karakter yang terdiri dari 1 huruf kapital, huruf kecil, 1 simbol, dan 1 angka.
                     </p>
-                  </div>
+                  </div> */}
+                  {formData.password && (
+  <div className="mt-2 transition-all duration-300 ease-in-out">
+    <p className="text-xs text-gray-500 mb-2">Password harus memenuhi:</p>
+    <ul className="space-y-1 text-xs text-gray-500">
+      <li className={`flex items-center ${formData.password.length >= 8 ? 'text-green-500' : ''}`}>
+        {formData.password.length >= 8 ? (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )}
+        Minimal 8 karakter
+      </li>
+      <li className={`flex items-center ${/[A-Z]/.test(formData.password) ? 'text-green-500' : ''}`}>
+        {/[A-Z]/.test(formData.password) ? (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )}
+        Mengandung huruf kapital
+      </li>
+      <li className={`flex items-center ${/[a-z]/.test(formData.password) ? 'text-green-500' : ''}`}>
+        {/[a-z]/.test(formData.password) ? (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )}
+        Mengandung huruf kecil
+      </li>
+      <li className={`flex items-center ${/[0-9]/.test(formData.password) ? 'text-green-500' : ''}`}>
+        {/[0-9]/.test(formData.password) ? (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )}
+        Mengandung angka
+      </li>
+      <li className={`flex items-center ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-green-500' : ''}`}>
+        {/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )}
+        Mengandung simbol
+      </li>
+    </ul>
+  </div>
+)}
                 </div>
 
                 <div>
@@ -804,7 +878,7 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type={showPassword ? "text" : "password"}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       placeholder="••••••••"
                       value={formData.confirmPassword}
                       onChange={(e) =>
@@ -840,7 +914,7 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type="file"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       accept="image/*"
                       onChange={handleFileChange}
                     />
@@ -857,7 +931,7 @@ const SignUpPage = () => {
                     </div>
                     <input
                       type="text"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       placeholder="+62 123 4567 8901"
                       value={formData.phone_number}
                       onChange={(e) =>
@@ -871,7 +945,7 @@ const SignUpPage = () => {
     type="button"
     onClick={getLocation}
     disabled={loading}
-    className={`w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all ${
+    className={`w-full bg-orange-400 text-white py-3 rounded-lg hover:bg-orange-500 transition-all ${
       loading ? "opacity-50 cursor-not-allowed" : ""
     }`}
   >
@@ -935,7 +1009,7 @@ const SignUpPage = () => {
                       {/* <VenusAndMars className="h-5 w-5 text-gray-400" /> */}
                     </div>
                     <select
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-3 border border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
                       value={formData.gender}
                       onChange={(e) =>
                         setFormData({
@@ -944,9 +1018,9 @@ const SignUpPage = () => {
                         })
                       }
                     >
-                      <option value="">Pilih Jenis Kelamin</option>
-                      <option value="male">Laki-laki</option>
-                      <option value="famale">Perempuan</option>
+                      <option className="bg-orange-300" value="">Pilih Jenis Kelamin</option>
+                      <option className="bg-orange-300" value="male">Laki-laki</option>
+                      <option className="bg-orange-300" value="famale">Perempuan</option>
                     </select>
                   </div>
                 </div>
@@ -958,7 +1032,7 @@ const SignUpPage = () => {
               {step > 1 && (
                 <button
                   type="button"
-                  className="bg-gray-100 text-black py-2 px-4 rounded-lg hover:bg-gray-200 transition-all"
+                  className="bg-gray-100 text-orange-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition-all"
                   onClick={handlePrevStep}
                 >
                   Kembali
@@ -966,19 +1040,32 @@ const SignUpPage = () => {
               )}
               {step < 3 ? (
                 <button
-                  type="button"
-                  className={`bg-blue-600 text-black py-2 px-4 rounded-lg hover:bg-blue-700 transition-all ${
-                    formData.password !== formData.confirmPassword ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  onClick={handleNextStep}
-                  disabled={formData.password !== formData.confirmPassword} // Nonaktifkan tombol jika password tidak sama
-                >
-                  Selanjutnya
-                </button>
+  type="button"
+  className={`bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-all ${
+    !(formData.password.length >= 8 && 
+      /[A-Z]/.test(formData.password) && 
+      /[a-z]/.test(formData.password) && 
+      /[0-9]/.test(formData.password) && 
+      /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) &&
+      formData.password === formData.confirmPassword) ? "opacity-50 cursor-not-allowed" : ""
+  }`}
+  onClick={handleNextStep}
+  disabled={
+    !(formData.password.length >= 8 && 
+      /[A-Z]/.test(formData.password) && 
+      /[a-z]/.test(formData.password) && 
+      /[0-9]/.test(formData.password) && 
+      /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) &&
+      formData.password === formData.confirmPassword)
+  }
+>
+  Selanjutnya
+</button>
+                
               ) : (
                 <button
                   type="button"
-                  className="bg-blue-600 text-black py-2 px-4 rounded-lg hover:bg-blue-700 transition-all"
+                  className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-all"
                   onClick={handleSubmit}
                   disabled={isSigningUp}
                 >
@@ -990,14 +1077,57 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      {/* Right Side - Image/Pattern */}
-      <div className="flex-1 hidden lg:flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600">
-        <AuthImagePattern
-          title={"Selamat Datang!"}
-          subtitle={
-            "Buat akun untuk bergabung dengan komunitas kami dan mulai berbagi."
-          }
-        />
+      {/* Right Side - Delivery Hero Section */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gradient-to-br from-orange-300 to-orange-500 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-orange-300/20 blur-2xl"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-orange-600/30 to-transparent z-0"></div>
+        
+        {/* Floating cakes */}
+        <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-lg animate-float-slow"></div>
+        <div className="absolute top-1/3 right-1/5 w-12 h-12 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-lg animate-float-medium"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-10 h-10 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-lg animate-float-fast"></div>
+
+        {/* Content */}
+        <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 z-10 border border-white/20">
+          <div className="text-center mb-8">
+            <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto shadow-lg backdrop-blur-sm border border-white/20">
+              <FaMotorcycle className="text-white text-4xl" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mt-6">Express Delivery</h2>
+            <p className="text-orange-100 mt-2">Direct connection with our professional couriers</p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="flex flex-col items-center">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-2 backdrop-blur-sm border border-white/20">
+                <FaBolt className="text-white text-xl" />
+              </div>
+              <span className="font-semibold text-white text-sm">FAST</span>
+              <span className="text-orange-100 text-xs">Under 30 mins</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-2 backdrop-blur-sm border border-white/20">
+                <FaMapMarkerAlt className="text-white text-xl" />
+              </div>
+              <span className="font-semibold text-white text-sm">PRECISE</span>
+              <span className="text-orange-100 text-xs">Accurate delivery</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-2 backdrop-blur-sm border border-white/20">
+                <FaMoneyBillWave className="text-white text-xl" />
+              </div>
+              <span className="font-semibold text-white text-sm">ECONOMICAL</span>
+              <span className="text-orange-100 text-xs">Best prices</span>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-orange-100 italic">
+              "Your favorite desserts delivered while they're still fresh!"
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

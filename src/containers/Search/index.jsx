@@ -1,180 +1,121 @@
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import useProductStore from "../../store/useProductStore";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FaStar, FaShoppingBag, FaArrowLeft } from 'react-icons/fa';
+import Navbar from '../../components/Navbar';
 
-const index = () => {
-  const { productItems = [], fetchProducts, addCartItem } = useProductStore();
-  const [filteredProducts, setFilteredProducts] = useState([]);
+const SearchPage = () => {
   const location = useLocation();
-  const query = new URLSearchParams(location.search).get('query');
+  const navigate = useNavigate();
+  const query = new URLSearchParams(location.search).get('q') || '';
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const token = localStorage.getItem("token")
-
+  // Fungsi untuk mensimulasikan pengambilan data produk
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    // Simulasi delay pengambilan data
+    const fetchSearchResults = async () => {
+      setIsLoading(true);
+      
+      // Simulasi: Ambil produk dari localStorage atau state global
+      // Di aplikasi nyata, ini akan mengambil dari API/Store
+      const storedProducts = localStorage.getItem('products');
+      const productItems = storedProducts ? JSON.parse(storedProducts) : [];
+      
+      // Filter produk berdasarkan query
+      const results = productItems.filter(item => 
+        item.name.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase()) ||
+        (item.seller && item.seller.name.toLowerCase().includes(query.toLowerCase()))
+      );
+      
+      setSearchResults(results);
+      setIsLoading(false);
+    };
 
-  useEffect(() => {
-    if (productItems.length > 0 && query) {
-      const filtered = productItems.filter(product => {
-        const isTitleMatch = product.title.toLowerCase().includes(query.toLowerCase());
-        const isDescriptionMatch = product.description.toLowerCase().includes(query.toLowerCase());
-        return (isTitleMatch || isDescriptionMatch);
-      });
-      setFilteredProducts(filtered);
-    }
-  }, [productItems, query]);
+    fetchSearchResults();
+  }, [query]);
 
-  const handleAddToCart = (product) => {
-    console.log("product", product)
-    if(!token){
-      alert("Anda belum login, silahkan login terlebih dahulu !!")
-      navigate("/login")
-    }else if (product.stock <= 0) {
-      alert("produk tidak mencukupi")
-    } else if(product && product.id) {
-      addCartItem(product);
-      alert("produk berhasil ditambahkan")
-      // navigate("/cart")
-    }else{
-      console.error("Invalid product:", product);
-    }
+  const ProductCard = ({ product }) => {
+    return (
+      <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col border border-gray-100">
+        <div className="relative pt-[100%]">
+          <button 
+            onClick={() => navigate(`/product-detail/${product.id}/detail`)} 
+            className="absolute inset-0 w-full h-full"
+          >
+            <img 
+              src={product.image_url || 'https://via.placeholder.com/300'}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/300';
+              }}
+            />
+          </button>
+        </div>
+        <div className="p-2 flex-grow flex flex-col">
+          <h3 className="font-semibold text-sm mb-1 line-clamp-2 h-10 leading-tight">{product.name}</h3>
+          <p className="text-gray-800 font-bold text-sm mb-1">Rp{product.price.toLocaleString()}</p>
+          
+          <div className="flex items-center mb-1">
+            <span className="flex items-center text-yellow-500 mr-1">
+              <FaStar className="text-xs" />
+            </span>
+            <span className="text-xs font-medium text-gray-700">
+              {/* {product?.rating?.toFixed(1) || '0.0'} */}
+            </span>
+            <span className="mx-1 text-gray-300">•</span>
+            <span className="text-xs text-gray-500">{product.total_sold || 0} terjual</span>
+          </div>
+          
+          <div className="text-xs text-gray-500 mb-2 truncate">{product.seller?.name || ''}</div>
+          
+          <button 
+            onClick={() => navigate(`/product-detail/${product.id}/detail`)}
+            className="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white text-xs py-1.5 rounded-full flex items-center justify-center transition-colors"
+          >
+            <FaShoppingBag className="mr-1 text-[10px]" />
+            <span>Pesan</span>
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="tab-content container mt-3 mb-3">
-      <div className=" text-end">
-                <ul className="nav nav-pills text-center mb-5">
-                  <li className="nav-item">
-                    <a
-                      className="d-flex m-2 py-2 bg-light rounded-pill active"
-                      data-bs-toggle="pill"
-                      href="#tab-1"
-                    >
-                      <span className="text-dark" style={{ width: 130 }}>
-                        All Products
-                      </span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="d-flex py-2 m-2 bg-light rounded-pill"
-                      data-bs-toggle="pill"
-                      href="#tab-2"
-                    >
-                      <span className="text-dark" style={{ width: 130 }}>
-                        Vegetables
-                      </span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="d-flex m-2 py-2 bg-light rounded-pill"
-                      data-bs-toggle="pill"
-                      href="#tab-3"
-                    >
-                      <span className="text-dark" style={{ width: 130 }}>
-                        Fruits
-                      </span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="d-flex m-2 py-2 bg-light rounded-pill"
-                      data-bs-toggle="pill"
-                      href="#tab-4"
-                    >
-                      <span className="text-dark" style={{ width: 130 }}>
-                        Bread
-                      </span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="d-flex m-2 py-2 bg-light rounded-pill"
-                      data-bs-toggle="pill"
-                      href="#tab-5"
-                    >
-                      <span className="text-dark" style={{ width: 130 }}>
-                        Meat
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-        <div id="tab-1" className="tab-pane fade show p-0 active">
-          <div className="row g-4">
-            <div className="col-lg-12">
-              <div className="row g-4">
-              {filteredProducts.map(product => (
-          <div
-          className="col-md-6 col-lg-4 col-xl-3"
-          key={product.id}
-        >
-          <div className="rounded position-relative fruite-product border border-secondary">
-            <div className="fruite-img">
-              <button
-                onClick={() => navigate(`/detail/${product.id}`)}
-              >
-                <img
-                  src={product.img_url}
-                  className="img-fluid w-100 rounded-top"
-                  alt=""
-                />
-              </button>
-            </div>
-            <div
-              className="text-white bg-secondary px-3 py-1 rounded position-absolute"
-              style={{ top: 10, left: 10 }}
-            >
-              Fruits
-            </div>
-            <div className="p-4 fruite-product-content border-top-0 rounded-bottom">
-              <h4>{product.title}</h4>
-              <p>{product.description}</p>
-              <div className="fruite-product-footer">
-                <p className="text-dark fs-5 fw-bold mb-0">
-                  {product.price} / kg
-                </p>
-              </div>
-              <p className="text-dark fs-5 mb-0 text-end">
-                Stock : {product.stock}
-              </p>
-            </div>
-            <div className="d-flex justify-content-end">
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="btn border border-secondary rounded-pill px-3 text-primary ms-2 me-2 mb-3"
-              >
-               <i class="fa-duotone fa-solid fa-cart-plus fs-5"></i>
-              </button>
-            </div>
-          </div>
+      
+      <div className="container mx-auto px-3 py-4 mt-16">
+        <div className="flex items-center mb-4">
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center text-gray-700 hover:text-orange-500 mr-2"
+          >
+            <FaArrowLeft className="mr-1" /> Kembali
+          </button>
+          <h1 className="text-lg font-bold">Hasil Pencarian: {query}</h1>
         </div>
-        ))}
-                {/* {products.length > 0 ? (
-                  products.map((product) => (
-                    
-                  ))
-                ) : (
-                  <>
-                    <h2 className="d-flex justify-content-center mt-3 mb-3">
-                      Data tidak ditemukan
-                    </h2>
-                  </>
-                )} */}
-              </div>
-            </div>
+        
+        {isLoading ? (
+          <div className="text-center py-8">
+            <p>Mencari produk...</p>
           </div>
-        </div>
+        ) : searchResults.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">Tidak ada produk yang ditemukan.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-3">
+            {searchResults.map(product => (
+              <ProductCard key={`search-${product.id}`} product={product} />
+            ))}
+          </div>
+        )}
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 
-export default index;
+export default SearchPage;

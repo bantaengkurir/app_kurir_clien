@@ -24,6 +24,7 @@ const useProductStore = create((set, get) => ({
     sellers: [],
     userData: getUserDataFromCookie(),
     productItems: [],
+    productById: [],
     productDesc: [],
     productSeller: [],
     cartItems: [],
@@ -84,6 +85,22 @@ const useProductStore = create((set, get) => ({
         socket.on("userOffline", (userId) => {
             set((state) => ({
                 onlineUsers: state.onlineUsers.filter(id => id !== userId)
+            }));
+        });
+        socket.on('orderStatusUpdated', ({ orderId, newStatus }) => {
+            set((state) => ({
+                orders: state.orders.map(order =>
+                    order.id === orderId ? {...order, status: newStatus } : order
+                )
+            }));
+        });
+
+        // Tambahkan listener untuk courierAvailabilityChanged
+        socket.on('courierAvailabilityChanged', ({ courierId, availability }) => {
+            set((state) => ({
+                couriers: state.couriers.map(courier =>
+                    courier.id === courierId ? {...courier, availability } : courier
+                )
             }));
         });
 
@@ -212,9 +229,9 @@ const useProductStore = create((set, get) => ({
 
     fetchProductById: async(id) => {
         try {
-            const token = get().token;
-            if (!token) {
-                console.error("Token not found. Unable to fetch product.");
+            const userData = get().userData;
+            if (!userData) {
+                console.error("userData not found. Unable to fetch products.");
                 return;
             }
 
@@ -225,7 +242,7 @@ const useProductStore = create((set, get) => ({
                 //     },
                 // }
             );
-            return response.data.data;
+            set({ productbyId: response.data.data || [] }); // Handle jika response kosong
         } catch (error) {
             console.error("Fetch product error:", error);
         }
@@ -414,7 +431,7 @@ const useProductStore = create((set, get) => ({
         set((state) => {
             const numericSellerId = Number(sellerId);
             const sellerItems = state.cartItems.filter(
-                item => item.product.seller_id === numericSellerId
+                item => item.variant.product.seller_id === numericSellerId
             );
 
             const allSelected = sellerItems.every(sellerItem =>
@@ -444,11 +461,11 @@ const useProductStore = create((set, get) => ({
         });
     },
 
-    toggleCartSelection: (product) => {
+    toggleCartSelection: (variant) => {
         set((state) => {
-            const isSelected = state.selectedCart.some(item => item.id === product.id);
+            const isSelected = state.selectedCart.some(item => item.id === variant.id);
             const newSelectedCart = isSelected ?
-                state.selectedCart.filter(item => item.id !== product.id) : [...state.selectedCart, product];
+                state.selectedCart.filter(item => item.id !== variant.id) : [...state.selectedCart, variant];
 
             // Simpan ke localStorage
             localStorage.setItem('selectedCart', JSON.stringify(newSelectedCart));
@@ -483,10 +500,15 @@ const useProductStore = create((set, get) => ({
             return;
         }
 
+        if (userData.role !== 'customer') {
+            console.error("User is not a customer. Unable to add item to cart.");
+            return;
+        }
+
         try {
             const response = await axiosInstance.post(
                 "/carts", {
-                    product_id: item.id,
+                    variant_id: item.id,
                     quantity: 1
                 },
             );
@@ -531,6 +553,92 @@ const useProductStore = create((set, get) => ({
         }
     },
 
+    // incrementCartItemQuantity: async(itemId) => {
+    //     const userData = get().userData;
+    //     if (!userData) {
+    //         console.error("userData not found. Unable to update item quantity.");
+    //         return;
+    //     }
+
+    //     const cartItem = get().cartItems.find((item) => item.id === itemId);
+    //     if (!cartItem) {
+    //         console.error("Cart item not found.");
+    //         return;
+    //     }
+
+    //     const newQuantity = cartItem.quantity + 1;
+
+    //     try {
+    //         const response = await axiosInstance.put(
+    //             `/carts/${itemId}`, {
+    //                 quantity: newQuantity,
+    //             },
+    //         );
+
+    //         const updatedCartItem = response.data.data;
+
+    //         set((state) => ({
+    //             cartItems: state.cartItems.map((item) =>
+    //                 item.id === itemId ? {...item, quantity: newQuantity } : item
+    //             ),
+    //             productItems: state.productItems.map((p) =>
+    //                 p.id === updatedCartItem.variant_id ? {...p, stock: p.stock - 1 } : p
+    //             ),
+    //         }));
+
+    //         console.log("Incremented cart item quantity:", updatedCartItem);
+    //     } catch (error) {
+    //         alert("Cek kembali ketersediaan produk")
+    //         console.error("Update cart item quantity error:", error);
+    //     }
+    // },
+
+    // decrementCartItemQuantity: async(itemId) => {
+    //     const userData = get().userData;
+    //     if (!userData) {
+    //         console.error("Token not found. Unable to update item quantity.");
+    //         return;
+    //     }
+
+    //     const cartItem = get().cartItems.find((item) => item.id === itemId);
+    //     if (!cartItem) {
+    //         console.error("Cart item not found.");
+    //         return;
+    //     }
+
+    //     if (cartItem.quantity <= 1) {
+    //         console.error("Quantity must be greater than 0.");
+    //         alert("Quantity must be greater than 0.")
+    //         return;
+    //     }
+
+    //     const newQuantity = cartItem.quantity - 1;
+
+    //     try {
+    //         const response = await axiosInstance.put(
+    //             `carts/${itemId}`, {
+    //                 quantity: newQuantity,
+    //             },
+    //         );
+
+    //         const updatedCartItem = response.data.data;
+
+    //         set((state) => ({
+    //             cartItems: state.cartItems.map((item) =>
+    //                 item.id === itemId ? {...item, quantity: newQuantity } : item
+    //             ),
+    //             productItems: state.productItems.map((p) =>
+    //                 p.id === updatedCartItem.variant_id ? {...p, stock: p.stock + 1 } : p
+    //             ),
+    //         }));
+
+    //         console.log("Decremented cart item quantity:", updatedCartItem);
+    //     } catch (error) {
+    //         alert("Cek kembali ketersediaan produk")
+    //         console.error("Update cart item quantity error:", error);
+    //     }
+    // },
+
     incrementCartItemQuantity: async(itemId) => {
         const userData = get().userData;
         if (!userData) {
@@ -560,8 +668,11 @@ const useProductStore = create((set, get) => ({
                     item.id === itemId ? {...item, quantity: newQuantity } : item
                 ),
                 productItems: state.productItems.map((p) =>
-                    p.id === updatedCartItem.product_id ? {...p, stock: p.stock - 1 } : p
+                    p.id === updatedCartItem.variant_id ? {...p, stock: p.stock - 1 } : p
                 ),
+                selectedCart: state.selectedCart.map(item =>
+                    item.id === itemId ? {...item, quantity: newQuantity } : item
+                )
             }));
 
             console.log("Incremented cart item quantity:", updatedCartItem);
@@ -606,8 +717,11 @@ const useProductStore = create((set, get) => ({
                     item.id === itemId ? {...item, quantity: newQuantity } : item
                 ),
                 productItems: state.productItems.map((p) =>
-                    p.id === updatedCartItem.product_id ? {...p, stock: p.stock + 1 } : p
+                    p.id === updatedCartItem.variant_id ? {...p, stock: p.stock + 1 } : p
                 ),
+                selectedCart: state.selectedCart.map(item =>
+                    item.id === itemId ? {...item, quantity: newQuantity } : item
+                )
             }));
 
             console.log("Decremented cart item quantity:", updatedCartItem);
@@ -617,72 +731,68 @@ const useProductStore = create((set, get) => ({
         }
     },
 
+    // createOrder: async(orderData) => {
+    //     const userData = get().userData;
+    //     // const { cartItems, selectedCart } = get();
+    //     console.log("ini userData", userData);
+    //     if (!userData) {
+    //         console.error("Token not found. Unable to create order.");
+    //         return;
+    //     }
 
-    createOrder: async(orderData, setError) => {
-        const userData = get().userData;
-        // const { cartItems, selectedCart } = get();
-        console.log("ini userData", userData);
-        if (!userData) {
-            console.error("Token not found. Unable to create order.");
-            return;
-        }
+    //     // // Filter item yang dipilih
+    //     // const selectedItems = cartItems.filter(item =>
+    //     //     selectedCart.includes(item.id)
+    //     // );
 
-        // // Filter item yang dipilih
-        // const selectedItems = cartItems.filter(item =>
-        //     selectedCart.includes(item.id)
-        // );
+    //     // // Validasi item terpilih
+    //     // if (selectedItems.length === 0) {
+    //     //     setError("Pilih minimal 1 produk untuk checkout");
+    //     //     return;
+    //     // }
 
-        // // Validasi item terpilih
-        // if (selectedItems.length === 0) {
-        //     setError("Pilih minimal 1 produk untuk checkout");
-        //     return;
-        // }
+    //     try {
+    //         const response = await axiosInstance.post("/orders", orderData, {
+    //             withCredentials: true,
+    //         });
+    //         console.log("Create order response:", response.data);
+    //         const newOrder = response.data;
 
-        try {
-            const response = await axios.post("http://localhost:8001/api/orders", orderData, {
-                withCredentials: true,
-            });
-            console.log("Create order response:", response.data);
-            const newOrder = response.data;
+    //         console.log("newOrder", response);
 
-            console.log("newOrder", response);
+    //         set((state) => ({
+    //             orders: [...state.orders, newOrder],
+    //             cartItems: [], // Kosongkan keranjang setelah order sukses
+    //         }));
 
-            set((state) => ({
-                orders: [...state.orders, newOrder],
-                cartItems: [], // Kosongkan keranjang setelah order sukses
-            }));
+    //         // // Update state setelah order sukses
+    //         // set((state) => ({
+    //         //     orders: [...state.orders, newOrder],
+    //         //     cartItems: state.cartItems.filter(item =>
+    //         //         !state.selectedCart.includes(item.id)
+    //         //     ),
+    //         //     selectedCart: []
+    //         // }));
 
-            // // Update state setelah order sukses
-            // set((state) => ({
-            //     orders: [...state.orders, newOrder],
-            //     cartItems: state.cartItems.filter(item =>
-            //         !state.selectedCart.includes(item.id)
-            //     ),
-            //     selectedCart: []
-            // }));
+    //         toast.success("Order created successfully!"); // Notifikasi sukses
+    //         get().clearSelectedCart(); // Otomatis hapus dari localStorage
 
-            toast.success("Order created successfully!"); // Notifikasi sukses
-            get().clearSelectedCart(); // Otomatis hapus dari localStorage
+    //     } catch (error) {
+    //         // console.error("Create order error:", error);
 
-        } catch (error) {
-            // console.error("Create order error:", error);
-
-            // Penanganan error yang lebih baik
-            if (error.response) {
-                // Error dari server (4xx atau 5xx)
-                toast.error(error.response.data.message || "Order creation failed.");
-                setError(error.response.data.message || "Order creation failed. Please try again.");
-            } else if (error.request) {
-                // Tidak ada respons dari server
-                toast.error("No response from server. Please check your connection.");
-                setError("No response from server. Please check your connection.");
-            } else {
-                // Error lainnya (misalnya, error JavaScript)
-                toast.error("An unexpected error occurred. Please try again.");
-                setError("An unexpected error occurred. Please try again.");
-            }
-        }
-    },
+    //         // Penanganan error yang lebih baik
+    //         if (error.response) {
+    //             // Error dari server (4xx atau 5xx)
+    //             toast.error(error.response.data.message || "Order creation failed.");
+    //         } else if (error.request) {
+    //             // Tidak ada respons dari server
+    //             toast.error("No response from server. Please check your connection.");
+    //         } else {
+    //             // Error lainnya (misalnya, error JavaScript)
+    //             toast.error("An unexpected error occurred. Please try again.");
+    //         }
+    //     }
+    // },
 
 
     // sendMessage: async(orderData) => {
@@ -694,6 +804,55 @@ const useProductStore = create((set, get) => ({
     //         toast.error(error.response.data.message);
     //     }
     // },
+
+    createOrder: async(orderData) => {
+        const userData = get().userData;
+
+        if (!userData) {
+            toast.error("Anda harus login terlebih dahulu");
+            throw new Error("User not authenticated");
+        }
+
+        try {
+            const response = await axiosInstance.post("/orders", orderData, {
+                withCredentials: true,
+            });
+
+            const responseData = response.data;
+            console.log("Order created:", responseData);
+
+            // Update state
+            set((state) => ({
+                orders: [...state.orders, responseData],
+                cartItems: state.cartItems.filter(item =>
+                    !state.selectedCart.some(selected => selected.id === item.id)
+                ),
+            }));
+
+            get().clearSelectedCart();
+            toast.success("Order berhasil dibuat!");
+
+            // Kembalikan response lengkap untuk digunakan di component
+            return {
+                status: 'success',
+                data: responseData,
+                message: 'Order created successfully'
+            };
+
+        } catch (error) {
+            console.error("Order creation error:", error);
+
+            let errorMessage = "Gagal membuat pesanan";
+            if (error.response) {
+                errorMessage = error.response.data.message || errorMessage;
+            }
+
+            toast.error(errorMessage);
+            throw error; // Re-throw error untuk ditangkap di component
+        }
+    },
+
+
 
     fetchOrder: async() => {
         try {
@@ -1049,7 +1208,7 @@ const useProductStore = create((set, get) => ({
                 return;
             }
 
-            const response = await axiosInstance.get("/payments", );
+            const response = await axiosInstance.get("/payments");
             set({ payments: response.data.data });
             console.log("Fetched payment successfully:", response.data.data);
         } catch (error) {
@@ -1170,6 +1329,7 @@ const useProductStore = create((set, get) => ({
             );
             console.log('product rating updated successfully:', response.data);
             toast.success('product rating updated successfully');
+            get().fetchRatProduct(); // Refetch ratings after update
         } catch (error) {
             console.error('Update product rating error:', error);
         }
@@ -1188,6 +1348,7 @@ const useProductStore = create((set, get) => ({
             );
             console.log('courier updated successfully:', response.data);
             toast.success('Courier rating updated successfully');
+            get().fetchRatCourier(); // Refetch ratings after update
         } catch (error) {
             console.error('Update courier error:', error);
         }
